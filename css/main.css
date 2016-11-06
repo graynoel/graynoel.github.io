@@ -483,7 +483,7 @@ body {
 }
 .footer-inner {
   box-sizing: border-box;
-  margin: 0 auto;
+  vertical-align: middle;
   width: 700px;
 }
 @media (min-width: 1600px) {
@@ -1563,7 +1563,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #3dff62;
+  background: #1b2dff;
 }
 .links-of-blogroll {
   font-size: 13px;
