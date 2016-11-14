@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="Coding On The Go...">
+<meta name="description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从初始化说起">
 <meta property="og:url" content="http://yoursite.com/2016/11/13/swift-init/index.html">
 <meta property="og:site_name" content="Hui Zhao >_<">
-<meta property="og:description" content="Coding On The Go...">
-<meta property="og:updated_time" content="2016-11-13T09:34:18.000Z">
+<meta property="og:description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
+<meta property="og:updated_time" content="2016-11-14T09:17:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从初始化说起">
-<meta name="twitter:description" content="Coding On The Go...">
+<meta name="twitter:description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
 
 
 
@@ -290,7 +290,27 @@
       
 
       
-        
+        <p>从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。<br><a id="more"></a></p>
+<hr>
+<h2 id="初始化方法调用顺序"><a href="#初始化方法调用顺序" class="headerlink" title="初始化方法调用顺序"></a>初始化方法调用顺序</h2><p>分别创建一个 Swift 类和 Objective-C 类，然后使用 Xcode 模板新建一个初始化方法后，我们可以得到如下代码：</p>
+<figure class="highlight objc"><figcaption><span>BlogInitOC.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">BlogInitOC</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)init</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</div><div class="line">      </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight swift"><figcaption><span>BlogInit.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BlogInit</span>: <span class="title">NSObject</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123; <span class="comment">// 需要手动添加 override 关键字</span></div><div class="line">      	</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对比发现，Swift 的初始化代码需要加上 override 关键字，方法内部没有调用 super 的 init 方法，并且没有 return 语句。虽然如此，但此时编译是可以通过的。</p>
+<p>接着，分别给这两个类加上一个属性变量 param：</p>
+<figure class="highlight objc"><figcaption><span>BlogInitOC.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">BlogInitOC</span> ()</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSString</span> *param;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">BlogInitOC</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)init</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</div><div class="line">      	</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight swift"><figcaption><span>BlogInit.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BlogInit</span>: <span class="title">NSObject</span> </span>&#123;</div><div class="line">	</div><div class="line">    <span class="keyword">let</span> param: <span class="type">String</span></div><div class="line">    	</div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">      	</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>情况变了，Objective-C 类一切正常，而 Swift 类提示了一条错误 <code>Property &#39;self.param&#39; not initialized at implicitly generated super.init call</code>，意思很明确，<code>param 参数没有在隐式生成 super.init 调用之前完成初始化</code>。原来 Swift 中并不是不调用 super.init，而是为了方便开发者由编译器完成了这一步，但是要求开发者在初始化方法中调用 super.init 之前完成成员变量的初始化。</p>
+<p>修改后的代码如下：</p>
+<figure class="highlight swift"><figcaption><span>BlogInit.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BlogInit</span>: <span class="title">NSObject</span> </span>&#123;</div><div class="line">	</div><div class="line">    <span class="keyword">let</span> param: <span class="type">String</span></div><div class="line">      </div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">    <span class="keyword">self</span>.param = <span class="string">"zhaohui"</span></div><div class="line">    <span class="comment">// super.init() // 可不写，编译器隐式生成 </span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于需要修改父类中成员变量值的情况，我们需要在调用 super.init 之后再进行修改，代码如下：</p>
+<figure class="highlight swift"><figcaption><span>引用代码</span><a href="http://swifter.tips/init/" target="_blank" rel="external">来源：初始化方法顺序</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> name: <span class="type">String</span></div><div class="line">    <span class="keyword">init</span>() &#123;</div><div class="line">        name = <span class="string">"cat"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tiger</span>: <span class="title">Cat</span> </span>&#123;</div><div class="line">    <span class="keyword">let</span> power: <span class="type">Int</span></div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">        power = <span class="number">10</span></div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</div><div class="line">        name = <span class="string">"tiger"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因此 Swift 中类的初始化顺序可以总结如下：</p>
+<ol>
+<li>初始化自己的成员变量，<em>必须</em></li>
+<li>调用父类初始化方法，<em>如无需第三步，则这一步也可省略</em></li>
+<li>修改父类成员变量，<em>可选</em></li>
+</ol>
+
       
     </div>
 
@@ -439,7 +459,7 @@
               
             
             
-              <p class="post-toc-empty">This post does not have outlines</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化方法调用顺序"><span class="nav-number">1.</span> <span class="nav-text">初始化方法调用顺序</span></a></li></ol></div>
             
           </div>
         </section>
