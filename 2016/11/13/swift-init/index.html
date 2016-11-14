@@ -86,13 +86,13 @@
 
 <meta name="description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从初始化说起">
+<meta property="og:title" content="从 Swift 初始化说起">
 <meta property="og:url" content="http://yoursite.com/2016/11/13/swift-init/index.html">
 <meta property="og:site_name" content="Hui Zhao >_<">
 <meta property="og:description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
-<meta property="og:updated_time" content="2016-11-14T12:48:35.000Z">
+<meta property="og:updated_time" content="2016-11-14T12:58:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从初始化说起">
+<meta name="twitter:title" content="从 Swift 初始化说起">
 <meta name="twitter:description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
 
 
@@ -117,7 +117,7 @@
   <link rel="canonical" href="http://yoursite.com/2016/11/13/swift-init/"/>
 
 
-  <title> 从初始化说起 | Hui Zhao >_< </title>
+  <title> 从 Swift 初始化说起 | Hui Zhao >_< </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="en">
@@ -231,7 +231,7 @@
             
             
               
-                从初始化说起
+                从 Swift 初始化说起
               
             
           </h1>
@@ -325,7 +325,7 @@
 <li><strong>Must call a designated initializer of the superclass ‘UIView’</strong>；</li>
 <li><strong>‘required’ initializer ‘init(coder:)’ must be provided by subclass of ‘UIView’</strong>。</li>
 </ol>
-<p>这个我们稍后再研究，再看一个例子：</p>
+<p>稍等，再看一个例子：</p>
 <figure class="highlight swift"><figcaption><span>Sample-2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomView</span>: <span class="title">UIView</span> </span>&#123;</div><div class="line">    <span class="keyword">let</span> param: <span class="type">Int</span></div><div class="line">    	</div><div class="line">    <span class="keyword">convenience</span> <span class="keyword">init</span>(param: <span class="type">Int</span>) &#123;</div><div class="line">    	<span class="keyword">self</span>.param = param</div><div class="line">    	<span class="keyword">super</span>.<span class="keyword">init</span>(frame: <span class="type">CGRect</span>()) <span class="comment">// error</span></div><div class="line">    &#125;</div><div class="line">    	</div><div class="line">    <span class="keyword">required</span> <span class="keyword">init</span>?(coder aDecoder: <span class="type">NSCoder</span>) &#123;</div><div class="line">    	<span class="built_in">fatalError</span>(<span class="string">"init(coder:) has not been implemented"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这时，我们又得到了一条新的错误：</p>
 <p><strong>Convenience initializer for ‘CustomView’ must delegate (with ‘self.init’) rather than chaining to a superclass initializer (with ‘super.init’)</strong></p>
