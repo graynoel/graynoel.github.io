@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/11/13/swift-init/index.html">
 <meta property="og:site_name" content="Hui Zhao >_<">
 <meta property="og:description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
-<meta property="og:updated_time" content="2016-11-14T12:58:11.000Z">
+<meta property="og:updated_time" content="2016-11-15T04:43:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 Swift 初始化说起">
 <meta name="twitter:description" content="从 Objective-C 转到 Swift 后，可能首先就会发觉 Swift 的初始化方法变了，曾经 Objective-C 里面随意信手拈来的初始化代码可能不好使了，一起学习一下吧。">
@@ -329,14 +329,14 @@
 <figure class="highlight swift"><figcaption><span>Sample-2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomView</span>: <span class="title">UIView</span> </span>&#123;</div><div class="line">    <span class="keyword">let</span> param: <span class="type">Int</span></div><div class="line">    	</div><div class="line">    <span class="keyword">convenience</span> <span class="keyword">init</span>(param: <span class="type">Int</span>) &#123;</div><div class="line">    	<span class="keyword">self</span>.param = param</div><div class="line">    	<span class="keyword">super</span>.<span class="keyword">init</span>(frame: <span class="type">CGRect</span>()) <span class="comment">// error</span></div><div class="line">    &#125;</div><div class="line">    	</div><div class="line">    <span class="keyword">required</span> <span class="keyword">init</span>?(coder aDecoder: <span class="type">NSCoder</span>) &#123;</div><div class="line">    	<span class="built_in">fatalError</span>(<span class="string">"init(coder:) has not been implemented"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这时，我们又得到了一条新的错误：</p>
 <p><strong>Convenience initializer for ‘CustomView’ must delegate (with ‘self.init’) rather than chaining to a superclass initializer (with ‘super.init’)</strong></p>
-<p>前面两个例子中，我们看到了关键字 <code>designated</code>、<code>required</code> 和 <code>convenience</code>，理解了这几个关键字也就能帮助我们理解整个初始化过程了。</p>
+<p>前面两个例子中，我们看到了关键字 <code>designated</code>、<code>convenience</code> 和 <code>required</code>，理解了这几个关键字也就能帮助我们理解整个初始化过程了。</p>
 <h3 id="designated"><a href="#designated" class="headerlink" title="designated"></a>designated</h3><p>看到 <code>designated</code>，我们很容易联想到 Objective-C 中 <code>NS_DESIGNATED_INITIALIZER</code>，它们的含义比较接近，都是用来设置<strong>指定初始化器</strong>，关于 Objective-C 中的用法，请参阅<a href="http://www.starfelix.com/blog/2014/04/13/zheng-que-bian-xie-designated-initializerde-ji-ge-yuan-ze/" target="_blank" rel="external">《正确编写Designated Initializer的几个原则》</a>，下面我们主要讨论 Swift 中的 <code>designated</code>。</p>
-<h3 id="required"><a href="#required" class="headerlink" title="required"></a>required</h3><h3 id="convenience"><a href="#convenience" class="headerlink" title="convenience"></a>convenience</h3><hr>
+<h3 id="convenience"><a href="#convenience" class="headerlink" title="convenience"></a>convenience</h3><h3 id="required"><a href="#required" class="headerlink" title="required"></a>required</h3><hr>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
 <li><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Initialization.html" target="_blank" rel="external">The Swift Programming Language: Initialization</a></li>
 <li><a href="http://draveness.me/swift-zhong-init-de-shi-yong/" target="_blank" rel="external">Swift 类构造器的使用</a></li>
 <li><a href="http://swifter.tips/init/" target="_blank" rel="external">初始化方法顺序</a></li>
-<li><a href="http://www.starfelix.com/blog/2014/04/13/zheng-que-bian-xie-designated-initializerde-ji-ge-yuan-ze/" target="_blank" rel="external">《正确编写Designated Initializer的几个原则》</a></li>
+<li><a href="http://www.starfelix.com/blog/2014/04/13/zheng-que-bian-xie-designated-initializerde-ji-ge-yuan-ze/" target="_blank" rel="external">正确编写Designated Initializer的几个原则</a></li>
 <li><a href="http://swifter.tips/init-keywords/" target="_blank" rel="external">DESIGNATED，CONVENIENCE 和 REQUIRED</a></li>
 <li><a href="http://swifter.tips/init-nil/" target="_blank" rel="external">初始化返回 NIL</a></li>
 </ol>
@@ -489,7 +489,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化方法调用顺序"><span class="nav-number">1.</span> <span class="nav-text">初始化方法调用顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键词"><span class="nav-number">2.</span> <span class="nav-text">关键词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#designated"><span class="nav-number">2.1.</span> <span class="nav-text">designated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#required"><span class="nav-number">2.2.</span> <span class="nav-text">required</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#convenience"><span class="nav-number">2.3.</span> <span class="nav-text">convenience</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化方法调用顺序"><span class="nav-number">1.</span> <span class="nav-text">初始化方法调用顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键词"><span class="nav-number">2.</span> <span class="nav-text">关键词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#designated"><span class="nav-number">2.1.</span> <span class="nav-text">designated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#convenience"><span class="nav-number">2.2.</span> <span class="nav-text">convenience</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#required"><span class="nav-number">2.3.</span> <span class="nav-text">required</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
         </section>
