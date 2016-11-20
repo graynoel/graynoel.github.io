@@ -1,0 +1,726 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/graynoel.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Swift 引入的 Optional，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift Optionals 源码解析">
+<meta property="og:url" content="http://yoursite.com/2016/11/19/swift-optionals/index.html">
+<meta property="og:site_name" content="Hui Zhao >_<">
+<meta property="og:description" content="Swift 引入的 Optional，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
+<meta property="og:updated_time" content="2016-11-20T10:39:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift Optionals 源码解析">
+<meta name="twitter:description" content="Swift 引入的 Optional，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/19/swift-optionals/"/>
+
+
+  <title> Swift Optionals 源码解析 | Hui Zhao >_< </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6e7a6a883e984dbc239969ec8c11dc70";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1260827839&web_id=1260827839" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hui Zhao >_<</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Swift Optionals 源码解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-11-19T17:46:20+08:00" content="2016-11-19">
+              2016-11-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index">
+                    <span itemprop="name">Swift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Swift 引入的 <code>Optional</code>，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 <code>Optional</code> 具体的实现逻辑。<br><a id="more"></a></p>
+<hr>
+<h2 id="初识-Optional"><a href="#初识-Optional" class="headerlink" title="初识 Optional"></a>初识 Optional</h2><p>Swift 中的 <code>Optional</code> 想要表达的涵义更多是“有没有”，而非“空不空”，因此在 Swift 中，对 <code>nil</code> 的使用也就不像 Objective-C 中那么随意。我们需要将其声明为 <code>Optional</code>（可能没有），才能将其赋值为 <code>nil</code>（没有），也正因为表达的是“有没有”，所以可选类型也就不局限于对象类型了，基本数据类型同样可以声明 <code>Optional</code>，并赋值为 <code>nil</code>。</p>
+<h3 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h3><p>Swift 声明一个 <code>Optional</code> 变量方法如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Optional</span>&lt;<span class="type">T</span>&gt;</div></pre></td></tr></table></figure>
+<p>另外，还有一个更常见的声明方式，即 <code>?</code>：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">T</span>?</div></pre></td></tr></table></figure>
+<p>上面两种方式是等价的，我们得到了一个类型为 <code>T</code> 的可选变量，如果我们不初始化，则可选变量的初始值为 <code>nil</code>，即，该变量没有值。</p>
+<p>读取可选变量时，通过 <code>!</code> 运算符进行强制解包（Forced Unwrapped），不过使用前需要先判断变量是否有值，否则会得到一个 runtime 错误：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue_1: <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;</div><div class="line">optionalValue_1 = <span class="number">5</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> optionalValue_1 != <span class="literal">nil</span> &#123;</div><div class="line">    <span class="built_in">print</span>(optionalValue_1!) <span class="comment">// "5"</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"optionalValue_1 has no value"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> optionalValue_2: <span class="type">Int</span>?</div><div class="line"><span class="comment">// fatal error: unexpectedly found nil while unwrapping an Optional value</span></div><div class="line"><span class="built_in">print</span>(optionalValue_2!)</div></pre></td></tr></table></figure>
+<h3 id="隐式解包（Implicitly-Unwrapped）"><a href="#隐式解包（Implicitly-Unwrapped）" class="headerlink" title="隐式解包（Implicitly Unwrapped）"></a>隐式解包（Implicitly Unwrapped）</h3><p>声明了一个可选变量后，每次读取都需要使用 <code>!</code> 进行强制解包，写起来比较麻烦，为了简便起见，我们可以将声明中的 <code>?</code> 替换为 <code>!</code>，这样，使用时系统会对可选变量进行隐式解包，就无需再添加 <code>!</code>：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalString: <span class="type">String</span>!</div><div class="line">optionalString = <span class="string">"Hello, Implicitly Unwrapped"</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> optionalString != <span class="literal">nil</span> &#123;</div><div class="line">    <span class="built_in">print</span>(optionalString) <span class="comment">// "Hello, Implicitly Unwrapped"</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"optionalString has no value"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如此用起来方便多了，跟 Objective-C 也类似了，可是，这看上去和一个非可选变量的使用完全一样，很容易让人误解为是一个正常变量，一定有值，不需要对其检查就可以使用，这不是有违 Swift 的安全的原则吗？为什么以安全著称的 Swift 会加入隐式解包并允许这种危险的写法呢？王巍（@onevcat）在其《100个Swift开发必备Tip》一书中<a href="http://swifter.tips/implicitly-optional/" target="_blank" rel="external">隐式解包 OPTIONAL</a>章节进行了探讨，以下摘录片段：</p>
+<blockquote><p>一切都是历史的错。因为 Objective-C 中 Cocoa 的所有类型变量都可以指向 nil 的，有一部分 Cocoa 的 API 中在参数或者返回时即使被声明为具体的类型，但是还是有可能在某些特定情况下是 nil，而同时也有另一部分 API 永远不会接收或者返回 nil。在 Objective-C 时，这两种情况并没有被加以区别，因为 Objective-C 里向 nil 发送消息并不会有什么不良影响。在将 Cocoa API 从 Objective-C 转为 Swift 的 module 声明的自动化工具里，是无法判定是否存在 nil 的可能的，因此也无法决定哪些类型应该是实际的类型，而哪些类型应该声明为 Optional。</p>
+<p>在这种自动化转换中，最简单粗暴的应对方式是全部转为 Optional，然后让使用者通过 Optional Binding 来判断并使用。虽然这是最安全的方式，但对使用者来说是一件非常麻烦的事情，我猜不会有人喜欢每次用个 API 就在 Optional 和普通类型之间转来转去。这时候，隐式解包的 Optional 就作为一个妥协方案出现了。使用隐式解包 Optional 的最大好处是对于那些我们能确认的 API 来说，我们可直接进行属性访问和方法调用，会很方便。但是需要牢记在心的是，隐式解包不意味着 “这个变量不会是 nil，你可以放心使用” 这种暗示，只能说 Swift 通过这个特性给了我们一种简便但是危险的使用方式罢了。</p>
+<footer><strong>王巍（@onevcat）</strong><cite><a href="http://swifter.tips/implicitly-optional/" target="_blank" rel="external">隐式解包 OPTIONAL</a></cite></footer></blockquote>
+<p>&nbsp;<br>总之，只要我们在使用时坚持对可选变量进行“为空判断”，即可安全的使用隐式解包特性。</p>
+<h3 id="可选绑定（Optional-Binding）"><a href="#可选绑定（Optional-Binding）" class="headerlink" title="可选绑定（Optional Binding）"></a>可选绑定（Optional Binding）</h3><p>可选绑定（Optional Binding）是用来判断可选类型是否包含值，如果包含就把值赋给一个临时常量或者变量，通常用于 <code>if</code> 和 <code>while</code> 语句中：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalString: <span class="type">String</span>!</div><div class="line">optionalString = <span class="string">"Hello, Optional Binding"</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> <span class="keyword">let</span> tempString = optionalString &#123;</div><div class="line">    <span class="built_in">print</span>(tempString) <span class="comment">// "Hello, Optional Binding"</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"optionalString has no value"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="Optional-源码解析"><a href="#Optional-源码解析" class="headerlink" title="Optional 源码解析"></a>Optional 源码解析</h2><p>在掌握了 <code>Optional</code> 的基本使用方法之后，我们通过 <a href="https://github.com/apple/swift" target="_blank" rel="external">Swift 源码</a>来了解一下 <code>Optional</code> 的实现细节。为了方便理解，我将分<a href="#Optional-定义">定义</a>、<a href="#Unwrapped">解包</a>、<a href="#运算符">运算符</a>和<a href="#Optional-Extensions">扩展方法</a> 4 个部分进行讲述。</p>
+<h3 id="Optional-定义"><a href="#Optional-定义" class="headerlink" title="Optional 定义"></a>Optional 定义</h3><p>打开 <code>Optional</code> 源代码（路径：<em>swift/stdlib/public/core/Optional.swift</em>），或通过 Xcode 查看 <code>Optional</code> 定义，可以看到 <code>Optional</code> 其实是一个 <code>enum</code>，具体代码如下（删除注释）：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Optional</span>&lt;<span class="title">Wrapped</span>&gt; : <span class="title">ExpressibleByNilLiteral</span> </span>&#123;</div><div class="line">    <span class="keyword">case</span> <span class="keyword">none</span></div><div class="line">    <span class="keyword">case</span> some(<span class="type">Wrapped</span>)</div><div class="line">    	</div><div class="line">    <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> some: <span class="type">Wrapped</span>)</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;U&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(Wrapped)</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">U</span>) <span class="keyword">rethrows</span> -&gt; <span class="type">U</span>?</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">flatMap</span>&lt;U&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(Wrapped)</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">U</span>?) <span class="keyword">rethrows</span> -&gt; <span class="type">U</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">init</span>(nilLiteral: ())</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> unsafelyUnwrapped: <span class="type">Wrapped</span> &#123; <span class="keyword">get</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过定义可以得到以下信息：</p>
+<ul>
+<li>包含 <code>none</code> 和 <code>some(Wrapped)</code> 两个 case，分别代表可选类型“没有值”和“有值”两种情况</li>
+</ul>
+<p>既然是枚举类型，那么我们就可以通过判断 case 是否匹配来读取可选变量的值，代码如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">String</span>?</div><div class="line"></div><div class="line"><span class="comment">// 方式 1</span></div><div class="line"><span class="keyword">switch</span> optionalValue &#123;</div><div class="line"><span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">    <span class="built_in">print</span>(<span class="string">"optionalString has no value"</span>)</div><div class="line"><span class="keyword">default</span>:</div><div class="line">    <span class="built_in">print</span>(optionalValue!)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 方式 2</span></div><div class="line"><span class="keyword">if</span> optionalValue == .<span class="keyword">none</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"optionalString has no value"</span>)</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">print</span>(optionalValue!)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 方式 3，推荐</span></div><div class="line"><span class="keyword">if</span> optionalValue == <span class="literal">nil</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"optionalString has no value"</span>)</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">print</span>(optionalValue!)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上三种方式效果等价，不过官方注释里说 <code>In code, the absence of a value is typically written using the `nil` literal rather than the explicit `.none` enumeration case</code>，即“没有值”时推荐使用 <code>nil</code>，而非 <code>.none</code>，因此上述方法 3 为推荐方式，也就是我们通常所用的方式。</p>
+<ul>
+<li>包含一个名为 <code>init(_ some: Wrapped)</code> 的初始化方法</li>
+</ul>
+<p><code>init(_ some: Wrapped)</code> 是 <code>Optional</code> 提供的初始化方法，可以通过这个初始化方法来创建一个有初始值的可选变量，因此以下三种方式是等效的：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue = <span class="type">Optional</span>(<span class="number">5</span>)</div><div class="line"></div><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt; = <span class="number">5</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Int</span>? = <span class="number">5</span></div></pre></td></tr></table></figure>
+<p>我们来看看 <code>init(_ some: Wrapped)</code> 的源码：</p>
+<figure class="highlight swift"><figcaption><span>init(_ some: Wrapped)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> some: <span class="type">Wrapped</span>) &#123;</div><div class="line">    <span class="keyword">self</span> = .some(some)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>即：将可选变量初始化为 <code>.some(some)</code>，这就是一个 <code>wrapped</code> 的值，<code>.some</code> 可以理解为就是 <code>Optional</code>，因此当我们初始化后得到的就是 <code>Optional(some)</code>，所谓的解包，其实就是将 <code>some</code> 从 <code>Optional(some)</code> 中解出来：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue = <span class="type">Optional</span>(<span class="number">5</span>)</div><div class="line"><span class="built_in">print</span>(optionalValue) <span class="comment">// Optional(5)</span></div></pre></td></tr></table></figure>
+<ul>
+<li>包含两个 Map 相关方法</li>
+</ul>
+<p>这部分将在本文 <a href="#Map">Map</a> 章节进行说明。</p>
+<ul>
+<li>实现了 <code>protocol ExpressibleByNilLiteral</code> 协议中的 <code>init(nilLiteral: ())</code> 方法</li>
+</ul>
+<p>协议 <code>ExpressibleByNilLiteral</code> 中包括一个 <code>init(nilLiteral: ())</code> 方法，功能是使用 <code>nil</code>（<code>Optional</code> 中为：<code>.none</code>）进行初始化，源码如下：</p>
+<figure class="highlight swift"><figcaption><span>init(nilLiteral: ())</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">init</span>(nilLiteral: ()) &#123;</div><div class="line">    <span class="keyword">self</span> = .<span class="keyword">none</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法是不能直接调用的，使用 <code>var i: Index? = nil</code> 的方式会自动调用该方法。</p>
+<ul>
+<li>包含一个名为 <code>unsafelyUnwrapped</code> 的只读变量</li>
+</ul>
+<p>这部分将在本文 <a href="#Unwrapped">Unwrapped</a> 章节进行说明。</p>
+<h3 id="Unwrapped"><a href="#Unwrapped" class="headerlink" title="Unwrapped"></a>Unwrapped</h3><p>上面讲到初始化一个可选变量后得到的是一个 <code>wrapped</code> 的值，使用时需要进行 <code>unwrapped</code>，即解包。我们都知道解包只需要在可选变量后面加上 <code>!</code> 即可。</p>
+<p>那么 <code>!</code> 具体是如何工作的呢？我们从源码（路径：<em>swift/stdlib/public/core/Policy.swift</em>）中找到它的定义：</p>
+<figure class="highlight swift"><figcaption><span>Policy.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Optional&lt;T&gt; unwrapping operator is built into the compiler as a part of</span></div><div class="line"><span class="comment">// postfix expression grammar.</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// postfix operator !</span></div></pre></td></tr></table></figure>
+<p>原来，解包符号 <code>!</code> 作为后缀表达式被放入了编译器中，我们无法得到其具体实现，不过这并不妨碍我们理解，因为还有另外一条线索，就是前面提到的名为 <code>unsafelyUnwrapped</code> 的只读变量。</p>
+<p>在日常开发中，我们一般不会用到 <code>unsafelyUnwrapped</code>，但其实它与 <code>!</code> 在一定程度上是等价的，我们先来看看这个变量的源代码：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> unsafelyUnwrapped: <span class="type">Wrapped</span> &#123;</div><div class="line">    @inline(__always)</div><div class="line">    <span class="keyword">get</span> &#123;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> x = <span class="keyword">self</span> &#123;</div><div class="line">            <span class="keyword">return</span> x</div><div class="line">        &#125;</div><div class="line">        _debugPreconditionFailure(<span class="string">"unsafelyUnwrapped of nil optional"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>unsafelyUnwrapped</code> 的 <code>get</code> 方法和我们常写的可选绑定语法很近似，这看上去非常安全，为什么变量名称是 “unsafely” 呢？稍安勿躁，我们来看看这个变量的官方注释：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// The wrapped value of this instance, unwrapped without checking whether</span></div><div class="line"><span class="comment">/// the instance is `nil`.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// The `unsafelyUnwrapped` property provides the same value as the forced</span></div><div class="line"><span class="comment">/// unwrap operator (postfix `!`). However, in optimized builds (`-O`), no</span></div><div class="line"><span class="comment">/// check is performed to ensure that the current instance actually has a</span></div><div class="line"><span class="comment">/// value. Accessing this property in the case of a `nil` value is a serious</span></div><div class="line"><span class="comment">/// programming error and could lead to undefined behavior or a runtime</span></div><div class="line"><span class="comment">/// error.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// In debug builds (`-Onone`), the `unsafelyUnwrapped` property has the same</span></div><div class="line"><span class="comment">/// behavior as using the postfix `!` operator and triggers a runtime error</span></div><div class="line"><span class="comment">/// if the instance is `nil`.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// The `unsafelyUnwrapped` property is recommended over calling the</span></div><div class="line"><span class="comment">/// `unsafeBitCast(_:)` function because the property is more restrictive</span></div><div class="line"><span class="comment">/// and because accessing the property still performs checking in debug</span></div><div class="line"><span class="comment">/// builds.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// - Warning: This property trades safety for performance.  Use</span></div><div class="line"><span class="comment">///   `unsafelyUnwrapped` only when you are confident that this instance</span></div><div class="line"><span class="comment">///   will never be equal to `nil` and only after you've tried using the</span></div><div class="line"><span class="comment">///   postfix `!` operator.</span></div></pre></td></tr></table></figure>
+<p>大意如下：</p>
+<ol>
+<li><code>unsafelyUnwrapped</code> 就是读取可选变量所包裹的值，不检查是否为 <code>nil</code>；</li>
+<li><code>unsafelyUnwrapped</code> 和 <code>!</code> 提供相同的值，但在编译优化设置为 (<code>-O</code>) 时，不会做任何检查，因此，直接访问可选变量的 <code>unsafelyUnwrapped</code> 会导致未知结果；</li>
+<li>在编译优化设置为 (<code>-Onone</code>) 时，<code>unsafelyUnwrapped</code> 和 <code>!</code> 表现相同，访问 <code>nil</code> 会引发 runtime 错误；</li>
+<li><code>unsafelyUnwrapped</code> 比调用 <code>unsafeBitCast(_:)</code> 方法更推荐，因为 debug 环境会进行安全检查；</li>
+<li>警告：<code>unsafelyUnwrapped</code> 以牺牲安全性来换取更好的性能，因此需要在确保非 <code>nil</code> 的情况下使用。</li>
+</ol>
+<p>下面我们分段解读：</p>
+<p>对于 1、2、3，来看以下代码：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue = <span class="type">Optional</span>(<span class="number">5</span>)</div><div class="line"><span class="built_in">print</span>(optionalValue!) <span class="comment">// 5</span></div><div class="line"><span class="built_in">print</span>(optionalValue.unsafelyUnwrapped) <span class="comment">// 5</span></div></pre></td></tr></table></figure>
+<p>可选变量有值的情况下，两种解包方式效果相同，再来看下面的代码：</p>
+<figure class="highlight swift"><figcaption><span>Swift (`-Onone`)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;</div><div class="line"><span class="built_in">print</span>(optionalValue!) <span class="comment">// fatal error: unexpectedly found nil while unwrapping an Optional value</span></div><div class="line"><span class="built_in">print</span>(optionalValue.unsafelyUnwrapped) <span class="comment">// fatal error: unsafelyUnwrapped of nil optional</span></div></pre></td></tr></table></figure>
+<p>上述代码是在 (<code>-Onone</code>) 下执行的，两种方式得到不同表述但相同涵义的错误，然后我们将编译优化切换至 (<code>-O</code>)：</p>
+<figure class="highlight swift"><figcaption><span>Swift (`-O`)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;</div><div class="line"><span class="built_in">print</span>(optionalValue!) <span class="comment">// EXC_BAD_INSTRUCTION</span></div><div class="line"><span class="built_in">print</span>(optionalValue.unsafelyUnwrapped) <span class="comment">// 0</span></div></pre></td></tr></table></figure>
+<p>这时，使用 <code>!</code> 解包出现错误，但 <code>unsafelyUnwrapped</code> 却正常输出了 0，而这个 0 对我们来说并不应该出现，因为可能导致程序出现无法预知的错误，这也就是为什么变量名中包含一个 “unsafely” 的原因。</p>
+<p>第 4 点中提到了一个名为 <code>unsafeBitCast(_:)</code> 的方法，并说明不推荐使用，为什么呢？我们来看看这个方法的具体源码（路径：<em>swift/stdlib/public/core/Builtin.swift</em>）：</p>
+<figure class="highlight swift"><figcaption><span>Builtin.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// Returns the bits of `x`, interpreted as having type `U`.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// - Warning: Breaks the guarantees of Swift's type system; use</span></div><div class="line"><span class="comment">///   with extreme care.  There's almost always a better way to do</span></div><div class="line"><span class="comment">///   anything.</span></div><div class="line"><span class="comment">///</span></div><div class="line">@_transparent</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">unsafeBitCast</span>&lt;T, U&gt;<span class="params">(<span class="number">_</span> x: T, to: U.<span class="keyword">Type</span>)</span></span> -&gt; <span class="type">U</span> &#123;</div><div class="line">  _precondition(<span class="type">MemoryLayout</span>&lt;<span class="type">T</span>&gt;.size == <span class="type">MemoryLayout</span>&lt;<span class="type">U</span>&gt;.size,</div><div class="line">    <span class="string">"can't unsafeBitCast between types of different sizes"</span>)</div><div class="line">  <span class="keyword">return</span> <span class="type">Builtin</span>.<span class="built_in">reinterpretCast</span>(x)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再来看一个使用的例子：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> array = <span class="type">NSArray</span>(object: <span class="string">"obj"</span>)</div><div class="line"><span class="keyword">let</span> str = <span class="built_in">unsafeBitCast</span>(<span class="type">CFArrayGetValueAtIndex</span>(array, <span class="number">0</span>), to: <span class="type">CFString</span>.<span class="keyword">self</span>)</div><div class="line"><span class="built_in">print</span>(str) <span class="comment">// obj</span></div></pre></td></tr></table></figure>
+<p>可以看出，<code>unsafeBitCast(_:)</code> 会将一个指针指向的内存强制按位转换为目标的类型，并且只进行了简单的 size 判断。这是非常危险的操作，因为这种转换是在 Swift 的类型管理之外进行的，因此编译器无法确保得到的类型是否确实正确，所以使用上需要非常注意。</p>
+<p>也是因为上述原因，<code>unsafelyUnwrapped</code> 比 <code>unsafeBitCast(_:)</code> 更安全，因为在 debug 环境下，我们能够在不安全使用的情况下得到错误。</p>
+<p>第 5 点警告也是我们日常使用可选变量时应该注意的，无论是使用 <code>!</code> 或是 <code>unsafelyUnwrapped</code>。</p>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p>通过 Xcode 进入 <code>Optional</code> 可以看到很多可选变量的运算符，但除了 <code>??</code> 以外均没有注释，下面我们还是通过源码来了解一下吧。</p>
+<h4 id=""><a href="#" class="headerlink" title="??"></a>??</h4><p><code>??</code> 是 Swift 中一个非常有用的操作符，用来对 <code>nil</code> 进行快速判断，<code>??</code> 可以判断输入并在当左侧的值是非 <code>nil</code> 的 <code>Optional</code> 值时返回其值，左侧是 <code>nil</code> 时返回右侧的值。</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Int</span>?</div><div class="line"><span class="keyword">var</span> aValue = <span class="number">5</span></div><div class="line"><span class="keyword">let</span> result = optionalValue ?? aValue</div><div class="line"><span class="built_in">print</span>(result) <span class="comment">// 5</span></div><div class="line"></div><div class="line">optionalValue = <span class="number">1</span></div><div class="line">result = optionalValue ?? aValue</div><div class="line"><span class="built_in">print</span>(result) <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>在 <code>Optional</code> 中有两个 <code>??</code> 方法，源码如下（删除注释）：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> ?? &lt;T&gt;<span class="params">(<span class="keyword">optional</span>: T?, defaultValue: @autoclosure <span class="params">()</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">T</span>)</div><div class="line">    <span class="keyword">rethrows</span> -&gt; <span class="type">T</span> &#123;</div><div class="line">    </div><div class="line">    <span class="keyword">switch</span> <span class="keyword">optional</span> &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="keyword">let</span> value):</div><div class="line">            <span class="keyword">return</span> value</div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">try</span> defaultValue()</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> ?? &lt;T&gt;<span class="params">(<span class="keyword">optional</span>: T?, defaultValue: @autoclosure <span class="params">()</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">T</span>?)</div><div class="line">    <span class="keyword">rethrows</span> -&gt; <span class="type">T</span>? &#123;</div><div class="line">    </div><div class="line">    <span class="keyword">switch</span> <span class="keyword">optional</span> &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="keyword">let</span> value):</div><div class="line">            <span class="keyword">return</span> value</div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">try</span> defaultValue()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们可以得到以下信息：</p>
+<ol>
+<li>两个方法的实现完全一样，只是第二个参数允许接收 <code>T</code> 和 <code>T?</code> 两种类型；</li>
+<li><code>??</code> 右侧的参数 <code>defaultValue</code> 被封装为了 <code>() -&gt; T</code> 和 <code>() -&gt; T?</code>。为什么这样做呢？下面再次摘录王巍（@onevcat）在其《100个Swift开发必备Tip》一书中 <a href="http://swifter.tips/autoclosure/" target="_blank" rel="external">@AUTOCLOSURE 和 ??</a> 章节部分片段进行解释：</li>
+</ol>
+<blockquote><p>可能你会有疑问，为什么这里要使用 autoclosure，直接接受 T 作为参数并返回不行么，为何要用 () -&gt; T 这样的形式包装一遍，岂不是画蛇添足？其实这正是 autoclosure 的一个最值得称赞的地方。如果我们直接使用 T，那么就意味着在 ?? 操作符真正取值之前，我们就必须准备好一个默认值传入到这个方法中，一般来说这不会有很大问题，但是如果这个默认值是通过一系列复杂计算得到的话，可能会成为浪费 – 因为其实如果 optional 不是 nil 的话，我们实际上是完全没有用到这个默认值，而会直接返回 optional 解包后的值的。这样的开销是完全可以避免的，方法就是将默认值的计算推迟到 optional 判定为 nil 之后。</p>
+<footer><strong>王巍（@onevcat）</strong><cite><a href="http://swifter.tips/autoclosure/" target="_blank" rel="external">@AUTOCLOSURE 和 ??</a></cite></footer></blockquote>
+<p>&nbsp;<br>我们通过源码也可以看出，当满足 <code>case .none</code> 时，直接返回 <code>defaultValue()</code>，正是因为这一巧妙的用法，克服了性能上的开销和使用上的不便，以如此优雅的方式返回默认值。</p>
+<h4 id="-1"><a href="#-1" class="headerlink" title="=="></a>==</h4><p>在 <code>Optional</code> 中存在三个 <code>==</code> 运算符的实现，用于对比可选变量的相等关系，源码如下：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> == &lt;T: Equatable&gt;<span class="params">(lhs: T?, rhs: T?)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">switch</span> (lhs, rhs) &#123;</div><div class="line">        <span class="keyword">case</span> <span class="keyword">let</span> (l?, r?):</div><div class="line">            <span class="keyword">return</span> l == r</div><div class="line">        <span class="keyword">case</span> (<span class="literal">nil</span>, <span class="literal">nil</span>):</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">        <span class="keyword">default</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> == &lt;T&gt;<span class="params">(lhs: T?, rhs: _OptionalNilComparisonType)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">switch</span> lhs &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="number">_</span>):</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> == &lt;T&gt;<span class="params">(lhs: _OptionalNilComparisonType, rhs: T?)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">switch</span> rhs &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="number">_</span>):</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第一个方法中，<code>==</code> 被用来对比两个遵循 <code>protocol Equatable</code> 的可选变量的等价关系，通过源码可以看出，以下两种情况会返回 <code>true</code>：</p>
+<ol>
+<li>两个可选变量均为 <code>nil</code>；</li>
+<li>两个可选变量均非 <code>nil</code>，且所包裹的值相等。</li>
+</ol>
+<p>不满足以上条件的情况均返回 <code>false</code>，示例代码如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> group1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</div><div class="line"><span class="keyword">let</span> group2 = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</div><div class="line"><span class="keyword">if</span> group1.first == group2.first &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"Start the same."</span>) <span class="comment">// Start the same.</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> <span class="keyword">left</span>: <span class="type">Int</span>? = <span class="literal">nil</span></div><div class="line"><span class="keyword">let</span> <span class="keyword">right</span>: <span class="type">Int</span>? = <span class="literal">nil</span></div><div class="line"><span class="keyword">if</span> <span class="keyword">left</span> == <span class="keyword">right</span> &#123;</div><div class="line">	<span class="built_in">print</span>(<span class="string">"Equal!"</span>) <span class="comment">// Equal!</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>另外，我们还可以将可选变量与非可选变量或常量进行比较，系统会将非可选变量或常量先 “包裹” 成一个 <code>Optional</code> 变量再进行上述比较：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="keyword">left</span>: <span class="type">Int</span> = <span class="number">5</span></div><div class="line"><span class="keyword">let</span> <span class="keyword">right</span>: <span class="type">Int</span>? = <span class="number">5</span></div><div class="line"><span class="keyword">if</span> <span class="keyword">left</span> == <span class="keyword">right</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"Equal!"</span>) <span class="comment">// Equal!</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> <span class="number">5</span> == <span class="keyword">right</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"Equal Too!"</span>) <span class="comment">// Equal Too!</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第二个和第三个方法我们也经常用到，它允许我们将可选变量与 <code>nil</code> 进行直接比较，与第一个方法的区别在于这里的可选变量即使不遵循 <code>protocol Equatable</code> 也可以进行比较，方法实现与判断可选变量是否有值的方式很类似。</p>
+<p>参数中 <code>_OptionalNilComparisonType</code> 的定义源码如下：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">struct</span> <span class="title">_OptionalNilComparisonType</span> : <span class="title">ExpressibleByNilLiteral</span> </span>&#123;</div><div class="line">    <span class="comment">/// Create an instance initialized with `nil`.</span></div><div class="line">    @_transparent</div><div class="line">    <span class="keyword">public</span> <span class="keyword">init</span>(nilLiteral: ()) &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用方法如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str: <span class="type">Data</span>? = <span class="literal">nil</span></div><div class="line"><span class="keyword">if</span> str == <span class="literal">nil</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"Data is nil."</span>) <span class="comment">// Data is nil.</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="-2"><a href="#-2" class="headerlink" title="!="></a>!=</h4><p><code>!=</code> 用于可选变量的 “不等于” 判断，实现方法共有三个，源码如下：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> != &lt;T : Equatable&gt;<span class="params">(lhs: T?, rhs: T?)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> !(lhs == rhs)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> != &lt;T&gt;<span class="params">(lhs: T?, rhs: _OptionalNilComparisonType)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">switch</span> lhs &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="number">_</span>):</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> != &lt;T&gt;<span class="params">(lhs: _OptionalNilComparisonType, rhs: T?)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">switch</span> rhs &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="number">_</span>):</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有了 <code>==</code> 的经验，<code>!=</code> 就很好理解了，只是对 <code>==</code> 进行逻辑取反，这里不再进行赘述。</p>
+<h4 id="-3"><a href="#-3" class="headerlink" title="~="></a>~=</h4><p>在 <code>Optional</code> 中，还有一个 <code>~=</code> 运算符，源码为：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> ~= &lt;T&gt;<span class="params">(lhs: _OptionalNilComparisonType, rhs: T?)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">switch</span> rhs &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="number">_</span>):</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>奇怪，这个方法的实现与 <code>==</code> 中第三个方法相同，为什么要多加一个 <code>~=</code> 呢？</p>
+<p><code>~=</code> 被称为模式匹配运算符（Pattern Matching），在可选变量的判断上与 <code>==</code> 确实有相同的功效，但是在使用上官方给出如下解释：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// - Note: To test whether an instance is `nil` in an `if` statement, use the</span></div><div class="line"><span class="comment">///   equal-to operator (`==`) instead of the pattern-matching operator. The</span></div><div class="line"><span class="comment">///   pattern-matching operator is primarily intended to enable `case`</span></div><div class="line"><span class="comment">///   statement pattern matching.</span></div></pre></td></tr></table></figure>
+<p>原来，<code>~=</code> 主要是被用于 <code>case</code> 语句中的模式匹配，正常的可选变量判断，我们仍然需要使用 <code>==</code>。</p>
+<h3 id="Optional-Extensions"><a href="#Optional-Extensions" class="headerlink" title="Optional Extensions"></a>Optional Extensions</h3><p>在 <code>Optional</code> 中，还存在两个 extension，源码如下：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Optional</span> : <span class="title">CustomDebugStringConvertible</span> </span>&#123;</div><div class="line">    <span class="comment">/// A textual representation of this instance, suitable for debugging.</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> debugDescription: <span class="type">String</span> &#123;</div><div class="line">        <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</div><div class="line">            <span class="keyword">case</span> .some(<span class="keyword">let</span> value):</div><div class="line">                <span class="keyword">var</span> result = <span class="string">"Optional("</span></div><div class="line">                    <span class="built_in">debugPrint</span>(value, terminator: <span class="string">""</span>, to: &amp;result)</div><div class="line">                    result += <span class="string">")"</span></div><div class="line">                <span class="keyword">return</span> result</div><div class="line">            <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">                <span class="keyword">return</span> <span class="string">"nil"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Optional</span> : <span class="title">CustomReflectable</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> customMirror: <span class="type">Mirror</span> &#123;</div><div class="line">        <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</div><div class="line">            <span class="keyword">case</span> .some(<span class="keyword">let</span> value):</div><div class="line">                <span class="keyword">return</span> <span class="type">Mirror</span>(</div><div class="line">                    <span class="keyword">self</span>,</div><div class="line">                    children: [ <span class="string">"some"</span>: value ],</div><div class="line">                    displayStyle: .<span class="keyword">optional</span>)</div><div class="line">            <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">                <span class="keyword">return</span> <span class="type">Mirror</span>(<span class="keyword">self</span>, children: [:], displayStyle: .<span class="keyword">optional</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>debugDescription</code> 变量输出其实就是我们常常看到的 <code>Optional(some)</code>，主要用于 debug：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Int</span>? = <span class="number">5</span></div><div class="line"><span class="built_in">print</span>(optionalValue.debugDescription) <span class="comment">// Optional(5)</span></div></pre></td></tr></table></figure>
+<p>第二个 extension 中的 <code>customMirror</code> 其实是创建了一个当前可选变量的 <code>Mirror</code>，<code>Mirror</code> 是 Swift 中定义的一个用于表示子结构的结构体类型（可以参考：<a href="https://developer.apple.com/reference/swift/mirror" target="_blank" rel="external">Mirror API Reference</a>），这里不再展开，后续有时间我们再详细论述。</p>
+<hr>
+<h2 id="Optional-补充"><a href="#Optional-补充" class="headerlink" title="Optional 补充"></a>Optional 补充</h2><p>感谢您坚持阅读到这里，经过上述的讨论，我们已经对 <code>Optional</code> 有了很详细的了解，不过还有两个相对比较重要的概念需要进行说明，就是可选链（Optional Chaining）和 Map，由于篇幅所限，以下仅进行简单的讨论，详细内容大家可以查阅官方文档或是文末提供的参考资料。</p>
+<h3 id="可选链（Optional-Chaining）"><a href="#可选链（Optional-Chaining）" class="headerlink" title="可选链（Optional Chaining）"></a>可选链（Optional Chaining）</h3><p>对于可选链，官方文档给出了如下定义：</p>
+<blockquote><p><em>Optional chaining</em> is a process for querying and calling properties, methods, and subscripts on an optional that might currently be nil. If the optional contains a value, the property, method, or subscript call succeeds; if the optional is nil, the property, method, or subscript call returns nil. Multiple queries can be chained together, and the entire chain fails gracefully if any link in the chain is nil.</p>
+</blockquote>
+<p>简而言之，就是当我们需要通过一条链（链上各个环节都可能返回 <code>nil</code>）访问某个属性、方法和下标时，可以通过可选链的方式代替强制解包，以此简化代码。</p>
+<p>以官方代码为例：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> residence: <span class="type">Residence</span>?</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Residence</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> numberOfRooms = <span class="number">1</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> john = <span class="type">Person</span>()</div><div class="line"><span class="keyword">let</span> roomCount = john.residence!.numberOfRooms</div><div class="line"><span class="comment">// this triggers a runtime error</span></div></pre></td></tr></table></figure>
+<p>由于访问链路径上 <code>residence</code> 为 <code>nil</code>，因此访问出错，这时，我们可以通过可选链方式避免这样的错误：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> <span class="keyword">let</span> roomCount = john.residence?.numberOfRooms &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"John's residence has <span class="subst">\(roomCount)</span> room(s)."</span>)</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"Unable to retrieve the number of rooms."</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// Prints "Unable to retrieve the number of rooms."</span></div></pre></td></tr></table></figure>
+<p>通过上述方式，告知 Swift 帮我们在 <code>residence</code> 有值时解析出 <code>numberOfRooms</code>，从而避免访问出错，或是写繁琐的判断代码。</p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p><code>Optional</code> 中包括两个 Map 相关方法，其源代码如下：</p>
+<figure class="highlight swift"><figcaption><span>Optional.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;U&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(Wrapped)</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">U</span>)</div><div class="line">    <span class="keyword">rethrows</span> -&gt; <span class="type">U</span>? &#123;</div><div class="line"></div><div class="line">    <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="keyword">let</span> y):</div><div class="line">            <span class="keyword">return</span> .some(<span class="keyword">try</span> transform(y))</div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> .<span class="keyword">none</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">flatMap</span>&lt;U&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(Wrapped)</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">U</span>?)</div><div class="line">    <span class="keyword">rethrows</span> -&gt; <span class="type">U</span>? &#123;</div><div class="line"></div><div class="line">    <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</div><div class="line">        <span class="keyword">case</span> .some(<span class="keyword">let</span> y):</div><div class="line">            <span class="keyword">return</span> <span class="keyword">try</span> transform(y)</div><div class="line">        <span class="keyword">case</span> .<span class="keyword">none</span>:</div><div class="line">            <span class="keyword">return</span> .<span class="keyword">none</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Optional Map</code> 提供了一种便捷的对可选变量进行变换（transform）的方法，使用 <code>map</code> 方法时，传入一个 <code>transform</code> 闭包，内部可以将接收到可选变量解包后的值，然后在闭包内完成“变换”，再返回。如下例：计算一个可选变量的平方：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Sample 1</span></div><div class="line"><span class="keyword">let</span> possibleNumber: <span class="type">Int</span>? = <span class="type">Int</span>(<span class="string">"42"</span>)</div><div class="line"><span class="keyword">let</span> possibleSquare = possibleNumber.<span class="built_in">map</span> &#123; $<span class="number">0</span> * $<span class="number">0</span> &#125;</div><div class="line"><span class="built_in">print</span>(possibleSquare) <span class="comment">// Optional(1746)</span></div><div class="line"></div><div class="line"><span class="comment">// Sample 2</span></div><div class="line"><span class="keyword">let</span> noNumber: <span class="type">Int</span>? = <span class="literal">nil</span></div><div class="line"><span class="keyword">let</span> noSquare = noNumber.<span class="built_in">map</span> &#123; $<span class="number">0</span> * $<span class="number">0</span> &#125;</div><div class="line"><span class="built_in">print</span>(noSquare) <span class="comment">// nil</span></div></pre></td></tr></table></figure>
+<p>Sample 1 闭包中的 <code>$0</code> 即可选变量解包后的值（<code>42</code>，非 <code>Optional(42)</code>）。如果可选变量没有值，那么返回即为 <code>nil</code>，如 Sample 2。</p>
+<p>那么 <code>flatMap</code> 方法呢？从声明上看，<code>flatMap</code> 返回的是 <code>U?</code>，说明该方法可以返回 <code>Optional</code>：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> optionalArray: [<span class="type">String</span>?] = [<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>];</div><div class="line"><span class="keyword">var</span> optionalResult = optionalArray.flatMap&#123; $<span class="number">0</span> &#125;</div><div class="line"><span class="built_in">print</span>(optionalResult) <span class="comment">// ["A", "B", "C"]</span></div><div class="line"></div><div class="line">optionalResult = optionalArray.<span class="built_in">map</span>&#123; $<span class="number">0</span> &#125;</div><div class="line"><span class="built_in">print</span>(optionalResult) <span class="comment">// error: cannot convert value of type 'String?' to closure result type 'String'</span></div></pre></td></tr></table></figure>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/apple/swift" target="_blank" rel="external">The Swift Programming Language (Source Code)</a></li>
+<li><a href="http://swifter.tips/implicitly-optional/" target="_blank" rel="external">隐式解包 OPTIONAL</a></li>
+<li><a href="http://swifter.tips/autoclosure/" target="_blank" rel="external">@AUTOCLOSURE 和 ??</a></li>
+<li><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/OptionalChaining.html" target="_blank" rel="external">The Swift Programming Language: Optional Chaining</a></li>
+<li><a href="http://swifter.tips/optional-chaining/" target="_blank" rel="external">OPTIONAL CHAINING</a></li>
+<li><a href="http://swifter.tips/optional-map/" target="_blank" rel="external">OPTIONAL MAP</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/13/swift-init/" rel="next" title="从 Swift 初始化说起">
+                <i class="fa fa-chevron-left"></i> 从 Swift 初始化说起
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Outlines
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/graynoel.jpeg"
+               alt="ZhaoHui" />
+          <p class="site-author-name" itemprop="name">ZhaoHui</p>
+          <p class="site-description motion-element" itemprop="description">Coding On The Go...</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初识-Optional"><span class="nav-number">1.</span> <span class="nav-text">初识 Optional</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础用法"><span class="nav-number">1.1.</span> <span class="nav-text">基础用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐式解包（Implicitly-Unwrapped）"><span class="nav-number">1.2.</span> <span class="nav-text">隐式解包（Implicitly Unwrapped）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可选绑定（Optional-Binding）"><span class="nav-number">1.3.</span> <span class="nav-text">可选绑定（Optional Binding）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optional-源码解析"><span class="nav-number">2.</span> <span class="nav-text">Optional 源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional-定义"><span class="nav-number">2.1.</span> <span class="nav-text">Optional 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unwrapped"><span class="nav-number">2.2.</span> <span class="nav-text">Unwrapped</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算符"><span class="nav-number">2.3.</span> <span class="nav-text">运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#"><span class="nav-number">2.3.1.</span> <span class="nav-text">??</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">==</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">!=</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#-3"><span class="nav-number">2.3.4.</span> <span class="nav-text">~=</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional-Extensions"><span class="nav-number">2.4.</span> <span class="nav-text">Optional Extensions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optional-补充"><span class="nav-number">3.</span> <span class="nav-text">Optional 补充</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可选链（Optional-Chaining）"><span class="nav-number">3.1.</span> <span class="nav-text">可选链（Optional Chaining）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Map"><span class="nav-number">3.2.</span> <span class="nav-text">Map</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhaoHui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
