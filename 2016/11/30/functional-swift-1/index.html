@@ -1,0 +1,630 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="函数式 Swift," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/graynoel.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="《函数式 Swift》读书笔记之函数式思想">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【函数式 Swift】函数式思想">
+<meta property="og:url" content="http://yoursite.com/2016/11/30/functional-swift-1/index.html">
+<meta property="og:site_name" content="Hui Zhao >_<">
+<meta property="og:description" content="《函数式 Swift》读书笔记之函数式思想">
+<meta property="og:updated_time" content="2016-12-01T15:17:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【函数式 Swift】函数式思想">
+<meta name="twitter:description" content="《函数式 Swift》读书笔记之函数式思想">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/30/functional-swift-1/"/>
+
+
+  <title> 【函数式 Swift】函数式思想 | Hui Zhao >_< </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1260827839&web_id=1260827839" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hui Zhao >_<</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【函数式 Swift】函数式思想
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-11-30T16:55:53+08:00" content="2016-11-30">
+              2016-11-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index">
+                    <span itemprop="name">Swift</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《函数式 Swift》读书笔记之函数式思想<br><a id="more"></a></p>
+<p>所谓函数式编程方法，是借助函数式思想对真实问题进行分析和简化，继而构建一系列简单、实用的函数，再“装配”成最终的程序，以解决问题的方法。</p>
+<hr>
+<h2 id="本章关键词"><a href="#本章关键词" class="headerlink" title="本章关键词"></a>本章关键词</h2><p>请带着以下关键词阅读本文：</p>
+<ul>
+<li><a href="#一等值（一等函数）">一等值（一等函数）</a></li>
+<li><a href="#模块化">模块化</a></li>
+<li><a href="#类型驱动">类型驱动</a></li>
+</ul>
+<h2 id="案例：Battleship"><a href="#案例：Battleship" class="headerlink" title="案例：Battleship"></a>案例：Battleship</h2><p>本章案例是一个关于战舰攻击范围计算的问题，描述如下：</p>
+<ul>
+<li>战舰能够攻击到射程范围内的敌船</li>
+<li>攻击时不能距离自身太近</li>
+<li>攻击时不能距离友船太近</li>
+</ul>
+<p>问题：计算某敌船是否在安全射程范围内，如图。</p>
+<p>对于这个问题，我们换一种描述：</p>
+<ul>
+<li>输入：目标（Ship）</li>
+<li>处理：计算战舰到敌船的距离、敌船到友船的距离，判断敌船距离是否在射程内，且敌船到友船距离足够大</li>
+<li>输出：是否（Bool）</li>
+</ul>
+<p>看上去问题并不复杂，我们可以产出以下代码：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> <span class="type">Distance</span> = <span class="type">Double</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Position</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> x: <span class="type">Double</span></div><div class="line">    <span class="keyword">var</span> y: <span class="type">Double</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Ship</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> position: <span class="type">Position</span></div><div class="line">    <span class="keyword">var</span> firingRange: <span class="type">Distance</span></div><div class="line">    <span class="keyword">var</span> unsafeRange: <span class="type">Distance</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Ship</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">canSafelyEngageShip</span><span class="params">(target: Ship, friendly: Ship)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">let</span> dx = target.position.x - position.x</div><div class="line">        <span class="keyword">let</span> dy = target.position.y - position.y</div><div class="line">        <span class="keyword">let</span> targetDistance = sqrt(dx * dx + dy * dy)</div><div class="line">        <span class="keyword">let</span> friendlyDx = friendly.position.x - target.position.x</div><div class="line">        <span class="keyword">let</span> friendlyDy = friendly.position.y - target.position.y</div><div class="line">        <span class="keyword">let</span> friendlyDistance = sqrt(friendlyDx * friendlyDx + friendlyDy * friendlyDy)</div><div class="line">        <span class="keyword">return</span> targetDistance &lt;= firingRange</div><div class="line">            &amp;&amp; targetDistance &gt; unsafeRange </div><div class="line">            &amp;&amp; friendlyDistance &gt; unsafeRange</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出，<code>canSafelyEngageShip</code> 方法分别计算了我们需要的两个距离：<code>targetDistance</code> 和 <code>friendlyDistance</code>，随后与战舰的射程 <code>firingRange</code> 和安全距离 <code>unsafeRange</code> 进行比较。</p>
+<p>功能看上去没有什么问题了，如果觉得 <code>canSafelyEngageShip</code> 方法过于繁琐，还可以添加一些辅助函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Position</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">minus</span><span class="params">(p: Position)</span></span> -&gt; <span class="type">Position</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="type">Position</span>(x: x - p.x, y: y - p.y)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> length: <span class="type">Double</span> &#123;</div><div class="line">        <span class="keyword">return</span> sqrt(x * x + y * y)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Ship</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">canSafelyEngageShip</span><span class="params">(target: Ship, friendly: Ship)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">let</span> targetDistance = target.position.minus(p: position).length</div><div class="line">        <span class="keyword">let</span> friendlyDistance = friendly.position.minus(p: target.position).length</div><div class="line">        <span class="keyword">return</span> targetDistance &lt;= firingRange</div><div class="line">            &amp;&amp; targetDistance &gt; unsafeRange</div><div class="line">            &amp;&amp; (friendlyDistance &gt; unsafeRange)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>到此，我们编写了一段比较直观且容易理解的代码，但由于我们使用了非常“过程式”的思维方式，所以扩展起来就不太容易了。比如，再添加一个友船，我们就需要再计算一个 <code>friendlyDistance_2</code>，这样下去，代码会变得很复杂、难理解。</p>
+<p>为了更好解决这个问题，我们先介绍一个概念：<code>一等值（First-class Value）</code>，或者称为 <code>一等函数（First-class Function）</code>。</p>
+<p>我们来看看维基上的解释：</p>
+<blockquote><p>In computer science, a programming language is said to have first-class functions if it treats functions as first-class citizens. Specifically, this means the language supports passing functions as arguments to other functions, returning them as the values from other functions, and assigning them to variables or storing them in data structures.</p>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/First-class_function" target="_blank" rel="external">First-class function</a></cite></footer></blockquote>
+<p>&nbsp;<br>简单来说，就是函数与普通变量相比没有什么特殊之处，可以作为参数进行传递，也可以作为函数的返回值。<strong>在 Swift 中，函数是一等值。</strong>带着这个思维，我们尝试使用更加声明式的方式来思考这个问题。</p>
+<p>归根结底，就是定义一个函数来判断一个点是否在范围内，所以我们要的就是一个输入 <code>Position</code>，输出 <code>Bool</code> 的函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">pointInRange</span><span class="params">(point: Position)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后，我们就可以用这个<strong>能够判断一个点是否在区域内</strong>的函数来表示一个区域，为了更容易理解，我们给这个函数起个名字（因为函数是一等值，所以我们可以像变量一样为其设置别名）：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> <span class="type">Region</span> = (<span class="type">Position</span>) -&gt; <span class="type">Bool</span></div></pre></td></tr></table></figure>
+<p>我们将攻击范围理解为<em>可见区域</em>，超出攻击范围或处于不安全范围均视为<em>不可见区域</em>，那么可知:</p>
+<p><em>有效区域</em> = <em>可见区域</em> - <em>不可见区域</em></p>
+<p>如此，问题从<strong>距离运算</strong>演变成了<strong>区域运算</strong>。明确问题后，我们可以定义以下区域：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 圆心为原点，半径为 radius 的圆形区域</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">circle</span><span class="params">(radius: Distance)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; point <span class="keyword">in</span> point.length &lt;= radius &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 圆心为 center，半径为 radius 的圆形区域</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">circle2</span><span class="params">(radius: Distance, center: Position)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; point <span class="keyword">in</span> point.minus(p: center).length &lt;= radius &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 区域变换函数</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">shift</span><span class="params">(region: @escaping Region, offset: Position)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; point <span class="keyword">in</span> region(point.minus(p: offset)) &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>前两个函数很容易理解，但第三个区域有些特别，它将一个输入的 <code>region</code> 通过 <code>offset</code> 变化后返回一个新的 <code>region</code>。为什么要有这样一个特殊“区域”呢？其实，这是函数式编程的一个核心概念，为了避免产生 <code>circle2</code> 这样会不断扩展然后变复杂的函数，通过一个函数来改变另一个函数的方式更加合理。例如，一个圆心为 (5,5) 半径为 10 的圆就可以用下面的方式来表示了：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">shift(region: circle(radius: <span class="number">10</span>), offset: <span class="type">Position</span>(x: <span class="number">5</span>, y: <span class="number">5</span>))</div></pre></td></tr></table></figure>
+<p>掌握了 <code>shift</code> 式的区域定义方法，我们可以继续定义以下“区域”：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将原区域取反得到新区域</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">invert</span><span class="params">(region: @escaping Region)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; point <span class="keyword">in</span> !region(point) &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 取两个区域的交集作为新区域</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">intersection</span><span class="params">(region1: @escaping Region, <span class="number">_</span> region2: @escaping Region)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; point <span class="keyword">in</span> region1(point) &amp;&amp; region2(point) &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 取两个区域的并集作为新区域</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">union</span><span class="params">(region1: @escaping Region, <span class="number">_</span> region2: @escaping Region)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; point <span class="keyword">in</span> region1(point) || region2(point) &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 取在一个区域，且不在另一个区域，得到新区域</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">difference</span><span class="params">(region: @escaping Region, minus: @escaping Region)</span></span> -&gt; <span class="type">Region</span> &#123;</div><div class="line">    <span class="keyword">return</span> intersection(region1: region, invert(region: minus))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>很轻松有木有！</p>
+<p>基于这个小型工具库，我们来改写案例中的代码，并与之前的代码进行对比：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// After</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">canSafelyEngageShip</span><span class="params">(target: Ship, friendly: Ship)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">let</span> rangeRegion = difference(region: circle(radius: firingRange),</div><div class="line">     minus: circle(radius: unsafeRange))</div><div class="line">    <span class="keyword">let</span> firingRegion = shift(region: rangeRegion, offset: position)</div><div class="line">    <span class="keyword">let</span> friendlyRegion = shift(region: circle(radius: unsafeRange),</div><div class="line">     offset: friendly.position)</div><div class="line">    <span class="keyword">let</span> resultRegion = difference(region: firingRegion, minus: friendlyRegion)</div><div class="line">    <span class="keyword">return</span> resultRegion(target.position)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Before</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">canSafelyEngageShip</span><span class="params">(target: Ship, friendly: Ship)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">let</span> targetDistance = target.position.minus(p: position).length</div><div class="line">    <span class="keyword">let</span> friendlyDistance = friendly.position.minus(p: target.position).length</div><div class="line">    <span class="keyword">return</span> targetDistance &lt;= firingRange</div><div class="line">      &amp;&amp; targetDistance &gt; unsafeRange</div><div class="line">      &amp;&amp; (friendlyDistance &gt; unsafeRange)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>借助以上函数式的思维方式，我们避开了具体问题中一系列的复杂数值计算，得到了易读、易维护、易迁移的代码。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h3 id="一等值（一等函数）"><a href="#一等值（一等函数）" class="headerlink" title="一等值（一等函数）"></a>一等值（一等函数）</h3><p>一等值这个名词我们可能较少听到，但其概念却是渗透在我们日常开发过程中的。将函数与普通变量对齐，是很重要的一项语言特性，不仅是编码过程，在简化问题上也能为我们带来巨大的收益。</p>
+<p>例如本文案例，我们使用<strong>函数</strong>描述<strong>区域</strong>，然后使用<strong>区域运算</strong>代替<strong>距离运算</strong>，在区域运算中，又使用了诸如 <code>shift</code> 的函数式思想，进而将问题进行简化并最终解决。</p>
+<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><p>在《函数式 Swift》的前言部分，有一段对模块化的描述：</p>
+<blockquote><p>相比于把程序认为是一系列赋值和方法调用，函数式开发者更倾向于强调每个程序都能被反复分解为越来越小的模块单元，而所有这些模块可以通过函数装配起来，以定义一个完整的程序。</p>
+<footer><strong>《函数式 Swift》</strong></footer></blockquote>
+<p>&nbsp;<br>模块化是一个听上去很酷，遇到真实问题后有时又会变得难以下手，本文案例中，原始问题看上去目标简单并且明确，只需要一定的数值计算就可以得到最终结果，但当我们借助函数式思维，将问题的解决转变为区域运算后，关注点就转变为区域的定义上，然后进一步分解为区域变换、交集、并集、差集等模块，最后，将这些模块“装配”起来，问题的解决也就顺理成章了。</p>
+<h3 id="类型驱动"><a href="#类型驱动" class="headerlink" title="类型驱动"></a>类型驱动</h3><p>这里的类型，对应着前文中我们定义的 <code>Region</code>，因为我们选用了 <code>Region</code> 这个函数式定义来描述案例中的基本问题单元，即<strong>判断一个点是否在区域内</strong>，从而使我们的问题转变为了区域运算。</p>
+<p>可见，我们是一种“类型驱动”的问题解决方式，或者说是编码方式，类型的选择决定了我们解决问题的方向，假如我们坚持使用 <code>Position</code> 和 <code>Distance</code>，那么解决问题的方向必然陷入此类数值运算中，显然，函数式的类型定义帮助我们简化并且更加优雅的解决了问题。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/objcio/functional-swift" target="_blank" rel="external">Github: objcio/functional-swift</a></li>
+<li><a href="https://en.wikipedia.org/wiki/First-class_function" target="_blank" rel="external">First-class function</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/函数式-Swift/" rel="tag">#函数式 Swift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/19/swift-optionals/" rel="next" title="Swift Optionals 源码解析">
+                <i class="fa fa-chevron-left"></i> Swift Optionals 源码解析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Outlines
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/graynoel.jpeg"
+               alt="ZhaoHui" />
+          <p class="site-author-name" itemprop="name">ZhaoHui</p>
+          <p class="site-description motion-element" itemprop="description">Coding On The Go...</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本章关键词"><span class="nav-number">1.</span> <span class="nav-text">本章关键词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例：Battleship"><span class="nav-number">2.</span> <span class="nav-text">案例：Battleship</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一等值（一等函数）"><span class="nav-number">3.1.</span> <span class="nav-text">一等值（一等函数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块化"><span class="nav-number">3.2.</span> <span class="nav-text">模块化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型驱动"><span class="nav-number">3.3.</span> <span class="nav-text">类型驱动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhaoHui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
