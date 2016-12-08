@@ -1,0 +1,648 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="函数式 Swift," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/graynoel.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="《函数式 Swift》读书笔记之封装 Core Image">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【函数式 Swift】封装 Core Image">
+<meta property="og:url" content="http://yoursite.com/2016/12/07/functional-swift-2/index.html">
+<meta property="og:site_name" content="Hui Zhao >_<">
+<meta property="og:description" content="《函数式 Swift》读书笔记之封装 Core Image">
+<meta property="og:image" content="http://yoursite.com/images/functional-swift/cifilter.png">
+<meta property="og:image" content="http://yoursite.com/images/functional-swift/cifilter-mix.png">
+<meta property="og:updated_time" content="2016-12-08T07:44:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【函数式 Swift】封装 Core Image">
+<meta name="twitter:description" content="《函数式 Swift》读书笔记之封装 Core Image">
+<meta name="twitter:image" content="http://yoursite.com/images/functional-swift/cifilter.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/07/functional-swift-2/"/>
+
+
+  <title> 【函数式 Swift】封装 Core Image | Hui Zhao >_< </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1260827839&web_id=1260827839" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hui Zhao >_<</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【函数式 Swift】封装 Core Image
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-07T10:50:43+08:00" content="2016-12-07">
+              2016-12-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index">
+                    <span itemprop="name">Swift</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《函数式 Swift》读书笔记之封装 Core Image<br><a id="more"></a></p>
+<p>前一章<a href="/2016/11/30/functional-swift-1/">《函数式思想》</a>中，我们学习了函数式编程思想，即，通过构建一系列简单、实用的函数，再“装配”起来解决实际问题。本章借助一个封装 Core Image 的案例进一步练习函数式思想的应用。</p>
+<hr>
+<h2 id="本章关键词"><a href="#本章关键词" class="headerlink" title="本章关键词"></a>本章关键词</h2><p>请带着以下关键词阅读本文：</p>
+<ul>
+<li><a href="#高阶函数">高阶函数</a></li>
+<li><a href="#柯里化">柯里化</a></li>
+</ul>
+<hr>
+<h2 id="案例：封装-Core-Image"><a href="#案例：封装-Core-Image" class="headerlink" title="案例：封装 Core Image"></a>案例：封装 Core Image</h2><p>本章案例是对 Core Image 中的 <code>CIFilter</code> 进行再次封装。开始看到这一章时，我就有疑问：为什么会选择这个不是很常用，但已经功能非常全面的 API 作为封装对象呢？后来想想，封装这种看上去没什么可封装的 API 刚好可以让我们体会到函数式思想的内涵，我们甚至可以不去关注函数的具体实现（下文中，我将会省略部分函数内部的具体实现，仅关注如何封装高质量函数）。</p>
+<p>如果你不了解 <code>CIFilter</code> 的用途，可以先来看看下面这段代码和效果：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> image = <span class="type">UIImage</span>(named: <span class="string">"graynoel"</span>)</div><div class="line"></div><div class="line"><span class="keyword">guard</span> image != <span class="literal">nil</span> <span class="keyword">else</span> &#123; <span class="comment">// 1</span></div><div class="line">    <span class="built_in">fatalError</span>()</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> originImage = <span class="type">CIImage</span>(image: image!)</div><div class="line"><span class="keyword">let</span> <span class="built_in">filter</span> = <span class="type">CIFilter</span>(name: <span class="string">"CIGaussianBlur"</span>) <span class="comment">// 2</span></div><div class="line"></div><div class="line"><span class="keyword">guard</span> <span class="built_in">filter</span> != <span class="literal">nil</span> <span class="keyword">else</span> &#123; <span class="comment">// 3</span></div><div class="line">    <span class="built_in">fatalError</span>()</div><div class="line">&#125;</div><div class="line"><span class="built_in">filter</span>!.setValue(originImage, forKey: kCIInputImageKey) <span class="comment">// 4</span></div><div class="line"><span class="built_in">filter</span>!.setValue(<span class="number">5.0</span>, forKey: kCIInputRadiusKey) <span class="comment">// 5</span></div><div class="line"></div><div class="line"><span class="keyword">guard</span> <span class="built_in">filter</span>!.outputImage != <span class="literal">nil</span> <span class="keyword">else</span> &#123; <span class="comment">// 6</span></div><div class="line">    <span class="built_in">fatalError</span>()</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> outputImage = <span class="type">UIImage</span>(ciImage: <span class="built_in">filter</span>!.outputImage!)</div></pre></td></tr></table></figure>
+<p><img src="/images/functional-swift/cifilter.png" alt="CIGaussianBlur CIFilter"></p>
+<p>代码逻辑比较简单：读入一个 <code>UIImage</code> 对象，转换为 <code>CIImage</code> 实例，然后通过 Core Image 中的 <code>CIFilter</code> API 对其进行“高斯模糊”处理。我们不用去关心实现逻辑，只看看这段代码本身的问题：</p>
+<ol>
+<li>防御型代码很多：注释 1、3、6 处；</li>
+<li>使用字符串配置滤镜类型：注释 2 处；</li>
+<li>使用键值方式配置滤镜参数：注释 4、5 处。</li>
+</ol>
+<p>这些问题当我们仅处理少量图片时似乎尚可接受，但大量使用时代码就变得复杂了。</p>
+<p>如何优化呢？很容易想到的解决办法就是把需要的滤镜变化封装成函数，一个可能的函数封装方式如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">blur</span><span class="params">(originImage: CIImage, radius: Double)</span></span> -&gt; <span class="type">CIImage</span> &#123;</div><div class="line">    <span class="keyword">let</span> outputImage: <span class="type">CIImage</span></div><div class="line">    ...</div><div class="line">    <span class="keyword">return</span> outputImage</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样做可以达到效果，可是并没有使用函数式思想，那函数式思想指导下的解决方案是什么样呢？</p>
+<p>借助前一章<a href="/2016/11/30/functional-swift-1/">《函数式思想》</a>的结论，首先应该选择一个合适的类型，而合适的类型直接取决于所要实现功能的输入和输出，很明显，输入、输出都是 <code>CIImage</code>，那么，我们可以得到以下函数式定义：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> <span class="type">Filter</span> = (<span class="type">CIImage</span>) -&gt; <span class="type">CIImage</span></div></pre></td></tr></table></figure>
+<p>如果您读过前一章的内容，看到这句定义后，应该会有一种豁然开朗的感觉。此时，我们的目标发生了变化，不再是为了实现某一些具体的滤镜方法，而是构建滤镜相关的“工具库”，为一切高阶函数封装提供可能。</p>
+<p>有了这个认识，我们重新定义 <code>blur</code> 函数，并与上文中的函数进行对比：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// after</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">blur</span><span class="params">(radius: Double)</span></span> -&gt; <span class="type">Filter</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; image <span class="keyword">in</span></div><div class="line">        <span class="keyword">let</span> outputImage: <span class="type">CIImage</span></div><div class="line">        ...</div><div class="line">        <span class="keyword">return</span> outputImage</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// before</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">blur</span><span class="params">(originImage: CIImage, radius: Double)</span></span> -&gt; <span class="type">CIImage</span> &#123;</div><div class="line">    <span class="keyword">let</span> outputImage: <span class="type">CIImage</span></div><div class="line">    ...</div><div class="line">    <span class="keyword">return</span> outputImage</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>基于这个思路，我们可以封装很多类似的函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">colorGenerator</span><span class="params">(color: UIColor)</span></span> -&gt; <span class="type">Filter</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; <span class="number">_</span> <span class="keyword">in</span></div><div class="line">        <span class="keyword">let</span> <span class="built_in">c</span> = <span class="type">CIColor</span>(color: color)</div><div class="line">        <span class="keyword">let</span> parameters = [kCIInputColorKey: <span class="built_in">c</span>]</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> <span class="built_in">filter</span> = <span class="type">CIFilter</span>(name: <span class="string">"CIConstantColorGenerator"</span>, withInputParameters: parameters) <span class="keyword">else</span> &#123;</div><div class="line">            <span class="built_in">fatalError</span>()</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> outputImage = <span class="built_in">filter</span>.outputImage <span class="keyword">else</span> &#123; <span class="built_in">fatalError</span>() &#125;</div><div class="line">        <span class="keyword">return</span> outputImage</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">	</div><div class="line">	</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">compositeSourceOver</span><span class="params">(overlay: CIImage)</span></span> -&gt; <span class="type">Filter</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; image <span class="keyword">in</span></div><div class="line">        <span class="keyword">let</span> parameters = [</div><div class="line">        	kCIInputBackgroundImageKey: image,</div><div class="line">        	kCIInputImageKey: overlay</div><div class="line">        ]</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> <span class="built_in">filter</span> = <span class="type">CIFilter</span>(name: <span class="string">"CISourceOverCompositing"</span>, withInputParameters: parameters) <span class="keyword">else</span> &#123;</div><div class="line">            <span class="built_in">fatalError</span>()</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> outputImage = <span class="built_in">filter</span>.outputImage <span class="keyword">else</span> &#123; <span class="built_in">fatalError</span>() &#125;</div><div class="line">        <span class="keyword">let</span> cropRect = image.extent</div><div class="line">        <span class="keyword">return</span> outputImage.cropping(to: cropRect)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>得到这个小型工具库之后，我们可以非常便捷的“装配”出复杂的滤镜效果函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">colorOverlay</span><span class="params">(color: UIColor)</span></span> -&gt; <span class="type">Filter</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; image <span class="keyword">in</span></div><div class="line">        <span class="keyword">let</span> overlay = colorGenerator(color: color)(image)</div><div class="line">        <span class="keyword">return</span> compositeSourceOver(overlay: overlay)(image)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们来用一下试试：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> image = <span class="type">UIImage</span>(named: <span class="string">"graynoel"</span>)</div><div class="line"><span class="keyword">let</span> originImage = <span class="type">CIImage</span>(image: image!)!</div><div class="line"></div><div class="line"><span class="comment">// 高斯模糊</span></div><div class="line"><span class="keyword">let</span> radius = <span class="number">5.0</span></div><div class="line"><span class="keyword">let</span> blurredImage = blur(radius: radius)(originImage)</div><div class="line"></div><div class="line"><span class="comment">// 对 blurredImage 再叠加颜色滤镜、合成滤镜</span></div><div class="line"><span class="keyword">let</span> overlayColor = <span class="type">UIColor</span>.red.withAlphaComponent(<span class="number">0.2</span>)</div><div class="line"><span class="keyword">let</span> outputImage = colorOverlay(color: overlayColor)(blurredImage)</div></pre></td></tr></table></figure>
+<p>效果如下：</p>
+<p><img src="/images/functional-swift/cifilter-mix.png" alt="CIGaussianBlur CIFilter"></p>
+<p>效果已经达成！为了方便，对于上面这种将两种滤镜组合应用的情况，可以直接嵌套的来写：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> outputImage = colorOverlay(color: overlayColor)(blur(radius: radius)(originImage))</div></pre></td></tr></table></figure>
+<p>复杂的括号嵌套已经让代码失去了可读性，如何优化呢？先来了解一个概念：柯里化（Currying），摘录一段维基中的解释：</p>
+<blockquote><p>In functional programming languages, and many others, it provides a way of automatically managing how arguments are passed to functions and exceptions.</p>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/Currying" target="_blank" rel="external">Currying</a></cite></footer></blockquote>
+<p>&nbsp;<br>简单来说，就是把接受多个参数的方法进行一些变形，使其更加灵活的方法。我们借用王巍（@onevcat）在其《100个Swift开发必备Tip》一书中<a href="http://swifter.tips/currying/" target="_blank" rel="external">柯里化 (CURRYING)</a> 章节的例子进行介绍：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 数字 +1 的函数</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">addOne</span><span class="params">(num: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">    <span class="keyword">return</span> num + <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果我们还需要 +2、+3、…… 的函数，这样的写法就无法扩展了，因此可以借助柯里化，用如下方式进行定义：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">addNum</span><span class="params">(adder: Int)</span></span> -&gt; (<span class="type">Int</span>) -&gt; <span class="type">Int</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; num <span class="keyword">in</span></div><div class="line">        <span class="keyword">return</span> num + adder</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，函数返回值变成了 <code>(Int) -&gt; Int</code>，这不正是一等函数的应用吗！我们再使用时，就可以采用如下方法：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 方式 1</span></div><div class="line"><span class="keyword">let</span> addTwo = addNum(adder: <span class="number">2</span>)</div><div class="line">addTwo(<span class="number">1</span>) <span class="comment">// 3</span></div><div class="line"></div><div class="line"><span class="comment">// 方式 2</span></div><div class="line">addNum(adder: <span class="number">2</span>)(<span class="number">3</span>) <span class="comment">// 5</span></div></pre></td></tr></table></figure>
+<p>方式 1 中的 <code>addTwo</code> 就是我们基于 <code>addNum</code> 函数“装配”出的高阶函数，而方式 2 的写法则更简洁。</p>
+<p>让我们再回到滤镜组合应用的问题，借助柯里化，我们定义以下函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">composeFilters</span><span class="params">(filter1: @escaping Filter, <span class="number">_</span> filter2: @escaping Filter)</span></span> -&gt; <span class="type">Filter</span> &#123;</div><div class="line">    <span class="keyword">return</span> &#123; image <span class="keyword">in</span></div><div class="line">        filter2(filter1(image))</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 调用</span></div><div class="line"><span class="keyword">let</span> composeTwoFilters = composeFilters(filter1: blur(radius: radius), colorOverlay(color: overlayColor))</div><div class="line"><span class="keyword">let</span> outputImage = composeTwoFilters(originImage)</div></pre></td></tr></table></figure>
+<p><code>composeFilters</code> 函数可以将两个 <code>Filter</code> 进行叠加，生成一个新的 <code>Filter</code>，然后传入 <code>originImage</code> 即可得到最终结果。</p>
+<p>原书章节还讲解了引入运算符的方式进行代码改写，思路类似，本文不再展开。</p>
+<hr>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h3 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h3><p>通过两章的学习，我们对高阶函数（Higher-order function）已经有了一些了解，下面简单总结一下。首先，还是先看看维基对高阶函数的定义：</p>
+<blockquote><p>In mathematics and computer science, a higher-order function (also functional, functional form or functor) is a function that does at least one of the following:</p>
+<ul>
+<li>takes one or more functions as arguments (i.e., procedural parameters),</li>
+<li>returns a function as its result.</li>
+</ul>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/Higher-order_function" target="_blank" rel="external">Higher-order function</a></cite></footer></blockquote>
+<p>&nbsp;<br>高阶函数满足两个条件：</p>
+<ol>
+<li>以一个或多个函数作为参数；</li>
+<li>将一个函数作为返回值。</li>
+</ol>
+<p>对比前文的代码，<code>composeFilters</code> 函数就是一个高阶函数，它以两个 <code>Filter</code> 函数作为参数，组合后的滤镜函数作为返回值。</p>
+<p>高阶函数应该与函数式思想相结合，函数式思想帮助我们得到一系列“小型”函数，然后“装配”成复杂的高阶函数，对功能进行扩展。同样的，高阶函数仍然可以作为“小型”函数，继续“装配”更高阶的函数，这种“装配”的便捷性和扩展性就得益于函数式编程方法。</p>
+<h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p>柯里化是本章新引入的概念，通过前文代码示例可以看出，借助柯里化，我们可以开发出用于“量产函数”的函数，就如同开发了一个函数的模板，可以生成各种类似功能的函数，并且避免写出很多重复代码，也方便了后续维护。</p>
+<p>但是，对于柯里化的应用是需要进行设计的，反复嵌套或链接过多括号会严重影响代码的可读性，使用时，要根据具体问题适度柯里化，提高开发效率和代码扩展性的同时，避免滥用导致的可读性下降。</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/objcio/functional-swift" target="_blank" rel="external">Github: objcio/functional-swift</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Currying" target="_blank" rel="external">Currying</a></li>
+<li><a href="http://swifter.tips/currying/" target="_blank" rel="external">柯里化 (CURRYING)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Higher-order_function" target="_blank" rel="external">Higher-order function</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/函数式-Swift/" rel="tag">#函数式 Swift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/30/functional-swift-1/" rel="next" title="【函数式 Swift】函数式思想">
+                <i class="fa fa-chevron-left"></i> 【函数式 Swift】函数式思想
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Outlines
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/graynoel.jpeg"
+               alt="ZhaoHui" />
+          <p class="site-author-name" itemprop="name">ZhaoHui</p>
+          <p class="site-description motion-element" itemprop="description">Coding On The Go...</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本章关键词"><span class="nav-number">1.</span> <span class="nav-text">本章关键词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例：封装-Core-Image"><span class="nav-number">2.</span> <span class="nav-text">案例：封装 Core Image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高阶函数"><span class="nav-number">3.1.</span> <span class="nav-text">高阶函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#柯里化"><span class="nav-number">3.2.</span> <span class="nav-text">柯里化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhaoHui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -64,7 +64,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/11/30/functional-swift-1/index.html">
 <meta property="og:site_name" content="Hui Zhao >_<">
 <meta property="og:description" content="《函数式 Swift》读书笔记之函数式思想">
-<meta property="og:updated_time" content="2016-12-01T15:40:10.000Z">
+<meta property="og:updated_time" content="2016-12-08T05:38:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【函数式 Swift】函数式思想">
 <meta name="twitter:description" content="《函数式 Swift》读书笔记之函数式思想">
@@ -331,7 +331,7 @@
 <p>很轻松有木有！</p>
 <p>基于这个小型工具库，我们来改写案例中的代码，并与之前的代码进行对比：</p>
 <figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// After</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">canSafelyEngageShip</span><span class="params">(target: Ship, friendly: Ship)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">let</span> rangeRegion = difference(region: circle(radius: firingRange),</div><div class="line">     minus: circle(radius: unsafeRange))</div><div class="line">    <span class="keyword">let</span> firingRegion = shift(region: rangeRegion, offset: position)</div><div class="line">    <span class="keyword">let</span> friendlyRegion = shift(region: circle(radius: unsafeRange),</div><div class="line">     offset: friendly.position)</div><div class="line">    <span class="keyword">let</span> resultRegion = difference(region: firingRegion, minus: friendlyRegion)</div><div class="line">    <span class="keyword">return</span> resultRegion(target.position)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Before</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">canSafelyEngageShip</span><span class="params">(target: Ship, friendly: Ship)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">let</span> targetDistance = target.position.minus(p: position).length</div><div class="line">    <span class="keyword">let</span> friendlyDistance = friendly.position.minus(p: target.position).length</div><div class="line">    <span class="keyword">return</span> targetDistance &lt;= firingRange</div><div class="line">      &amp;&amp; targetDistance &gt; unsafeRange</div><div class="line">      &amp;&amp; (friendlyDistance &gt; unsafeRange)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>借助以上函数式的思维方式，我们避开了具体问题中一系列的复杂数值计算，得到了易读、易维护、易迁移的代码。</p>
+<p>借助以上函数式的思维方式，我们避开了具体问题中一系列的复杂数值计算和布尔判断，得到了易读、易维护、易迁移的代码。</p>
 <hr>
 <h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h3 id="一等值（一等函数）"><a href="#一等值（一等函数）" class="headerlink" title="一等值（一等函数）"></a>一等值（一等函数）</h3><p>一等值这个名词我们可能较少听到，但其概念却是渗透在我们日常开发过程中的。将函数与普通变量对齐，是很重要的一项语言特性，不仅是编码过程，在简化问题上也能为我们带来巨大的收益。</p>
 <p>例如本文案例，我们使用<strong>函数</strong>描述<strong>区域</strong>，然后使用<strong>区域运算</strong>代替<strong>距离运算</strong>，在区域运算中，又使用了诸如 <code>shift</code> 的函数式思想，进而将问题进行简化并最终解决。</p>
@@ -384,6 +384,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/07/functional-swift-2/" rel="prev" title="【函数式 Swift】封装 Core Image">
+                【函数式 Swift】封装 Core Image <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -451,7 +455,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
