@@ -1,0 +1,665 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="函数式 Swift," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/graynoel.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="《函数式 Swift》读书笔记之 Map、Filter 和 Reduce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【函数式 Swift】Map、Filter 和 Reduce">
+<meta property="og:url" content="http://yoursite.com/2016/12/11/functional-swift-3/index.html">
+<meta property="og:site_name" content="Hui Zhao >_<">
+<meta property="og:description" content="《函数式 Swift》读书笔记之 Map、Filter 和 Reduce">
+<meta property="og:updated_time" content="2016-12-12T13:42:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【函数式 Swift】Map、Filter 和 Reduce">
+<meta name="twitter:description" content="《函数式 Swift》读书笔记之 Map、Filter 和 Reduce">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/11/functional-swift-3/"/>
+
+
+  <title> 【函数式 Swift】Map、Filter 和 Reduce | Hui Zhao >_< </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1260827839&web_id=1260827839" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hui Zhao >_<</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【函数式 Swift】Map、Filter 和 Reduce
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-11T16:17:59+08:00" content="2016-12-11">
+              2016-12-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index">
+                    <span itemprop="name">Swift</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《函数式 Swift》读书笔记之 Map、Filter 和 Reduce<br><a id="more"></a></p>
+<p>标题中的三个数组操作函数我们并不陌生，本章将借助这些 Swift 标准库中的函数，再次探索函数式思想的应用。</p>
+<hr>
+<h2 id="本章关键词"><a href="#本章关键词" class="headerlink" title="本章关键词"></a>本章关键词</h2><p>请带着以下关键词阅读本文：</p>
+<ul>
+<li><a href="#函数式思想">函数式思想</a></li>
+<li><a href="#泛型">泛型</a></li>
+</ul>
+<hr>
+<h2 id="案例：City-Filter"><a href="#案例：City-Filter" class="headerlink" title="案例：City Filter"></a>案例：City Filter</h2><p>使用 <code>City</code> 结构体描述城市信息（名字、人口数量），并定义一个城市数组：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">City</span> </span>&#123;</div><div class="line">    <span class="keyword">let</span> name: <span class="type">String</span></div><div class="line">    <span class="keyword">let</span> population: <span class="type">Int</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> paris = <span class="type">City</span>(name: <span class="string">"Paris"</span>, population: <span class="number">2241</span>) <span class="comment">// 单位为“千”</span></div><div class="line"><span class="keyword">let</span> madrid = <span class="type">City</span>(name: <span class="string">"Madrid"</span>, population: <span class="number">3165</span>)</div><div class="line"><span class="keyword">let</span> amsterdam = <span class="type">City</span>(name: <span class="string">"Amsterdam"</span>, population: <span class="number">827</span>)</div><div class="line"><span class="keyword">let</span> berlin = <span class="type">City</span>(name: <span class="string">"Berlin"</span>, population: <span class="number">3562</span>)</div><div class="line"></div><div class="line"><span class="keyword">let</span> cities = [paris, madrid, amsterdam, berlin]</div></pre></td></tr></table></figure>
+<p>问题：输出 <code>cities</code> 数组中所有人口超过百万的城市信息，并将人口数量单位转换为“个”。</p>
+<p>开始解决问题之前，请大家先忘掉标题中 Map、Filter 和 Reduce 等函数，无论之前是否使用过，我们尝试从零开始逐步向函数式思想过渡。</p>
+<p>我们先使用一个简单的思路来解决这个问题，即，遍历输入的城市数组，然后依次判断每个城市的人口数量，超过一百万的城市输出其信息：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">findCityMoreThanOneMillion</span><span class="params">(<span class="number">_</span> cities: [City])</span></span> -&gt; <span class="type">String</span> &#123;</div><div class="line">    <span class="keyword">var</span> result = <span class="string">"City: Population\n"</span></div><div class="line">    <span class="keyword">for</span> city <span class="keyword">in</span> cities &#123;</div><div class="line">        <span class="keyword">if</span> city.population &gt; <span class="number">1000</span> &#123;</div><div class="line">            result = result + <span class="string">"<span class="subst">\(city.name)</span>: <span class="subst">\(city.population * <span class="number">1000</span>)</span>\n"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> result = findCityMoreThanOneMillion(cities)</div><div class="line"><span class="built_in">print</span>(result)</div><div class="line"><span class="comment">// City: Population</span></div><div class="line"><span class="comment">// Paris: 2241000</span></div><div class="line"><span class="comment">// Madrid: 3165000</span></div><div class="line"><span class="comment">// Berlin: 3562000</span></div></pre></td></tr></table></figure>
+<p>对于一个具体问题来说，我们的解法并不算差，满足需求、代码也简单，但是它只能正常工作于这样局限的场景中，显然，这不符合函数式思想。</p>
+<p>我们从上述代码开始分析，<code>findCityMoreThanOneMillion</code> 函数主要完成了以下三个工作：</p>
+<ol>
+<li>过滤：通过 <code>city.population &gt; 1000</code> 过滤出人口超过百万的城市；</li>
+<li>转换单位：通过 <code>city.population * 1000</code> 将单位转换为“个”；</li>
+<li>拼接结果：使用 <code>var result</code> 将结果拼接起来，并最终返回。</li>
+</ol>
+<p>这三步自然的帮我们将原问题分解成了三个子问题，即：</p>
+<ol>
+<li>数组元素过滤问题（Filter）；</li>
+<li>数组元素修改问题（Map）；</li>
+<li>数组遍历与结果拼接问题（Reduce）。</li>
+</ol>
+<p>为了解决原始问题，我们需要优先解决这三个子问题，很明显，它们对应了标题中的函数，下面一一讨论（为了匹配原书内容，我们从 Map 开始）。</p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p>案例中，我们需要将 <code>city.population</code> 的单位转换为“个”，本质上就是将一个数值转换为另一个数值，下面编写一个函数来实现这个功能：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">transformArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Int</span>] &#123;</div><div class="line">    <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</div><div class="line">        result.append(x * <span class="number">1000</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用该函数可以帮助我们将一个 <code>[Int]</code> 数组中的每个元素乘以 1000，这样就能满足我们从“千”到“个”的单位转换需求，然而，这个函数存在的问题也非常明显：</p>
+<ol>
+<li>入参和返回值均固定为 <code>[Int]</code>，扩展性差；</li>
+<li>数值变换方式固定为 <code>x * 1000</code>，场景局限。</li>
+</ol>
+<p>试想，如果输入数组可能为 <code>[Double]</code> 或 <code>[Int]</code>，需要将单位从“千”转换为“万”、“百万”或者“千万”，输出为 <code>[Int]</code> 或 <code>[Double]</code>，就不得不去修改这个函数，或是添加更多相似的函数。</p>
+<p>如何解决呢？先来了解一个概念：泛型（Generics），Swift 官方文档对泛型的定义如下：</p>
+<blockquote><p><em>Generic code</em> enables you to write flexible, reusable functions and types that can work with any type, subject to requirements that you define. You can write code that avoids duplication and expresses its intent in a clear, abstracted manner.</p>
+<footer><strong>The Swift Programming Language</strong><cite><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Generics.html" target="_blank" rel="external">Generics</a></cite></footer></blockquote>
+<p>&nbsp;<br>可见，泛型的目标就是编写灵活、可复用，并且支持任意类型的函数，避免重复性的代码。以官方代码为例：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">swapTwoValues</span>&lt;T&gt;<span class="params">(<span class="number">_</span> a: <span class="keyword">inout</span> T, <span class="number">_</span> b: <span class="keyword">inout</span> T)</span></span> &#123;</div><div class="line">    <span class="keyword">let</span> temporaryA = a</div><div class="line">    a = b</div><div class="line">    b = temporaryA</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> someInt = <span class="number">3</span></div><div class="line"><span class="keyword">var</span> anotherInt = <span class="number">107</span></div><div class="line">swapTwoValues(&amp;someInt, &amp;anotherInt)</div><div class="line"><span class="comment">// someInt is now 107, and anotherInt is now 3</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> someString = <span class="string">"hello"</span></div><div class="line"><span class="keyword">var</span> anotherString = <span class="string">"world"</span></div><div class="line">swapTwoValues(&amp;someString, &amp;anotherString)</div><div class="line"><span class="comment">// someString is now "world", and anotherString is now "hello"</span></div></pre></td></tr></table></figure>
+<p>使用泛型定义的 <code>swapTwoValues</code> 函数能够接受任意类型的入参，无论是 <code>Int</code> 还是 <code>String</code> 均能正常工作。</p>
+<p>回到 <code>transformArray</code> 函数：</p>
+<p>引入泛型可以帮助我们解决第一个问题，即，入参和返回值均固定为 <code>[Int]</code>，既然入参和返回值可以是不相关的两种数组类型，那么我们可以使用两个泛型来表示它们，例如 <code>[E]</code> 和 <code>[T]</code>。</p>
+<p>此时，<code>transformArray</code> 函数的入参和返回值变成了 <code>[E]</code> 和 <code>[T]</code>，那么函数内部所要完成的任务就是将 <code>[E]</code> 转换为 <code>[T]</code>，而转换过程正好对应了第二个问题，即，数值变换方式固定位 <code>x * 1000</code>，解决它只需要调用方将这个“转换过程”传递给 <code>transformArray</code> 函数即可，也就是说，我们需要一个形如这样的函数作为入参：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> <span class="type">Transform</span> = (<span class="type">E</span>) -&gt; (<span class="type">T</span>)</div><div class="line"><span class="comment">// 由于没有定义 E、T 泛型，所以这里仅作示意</span></div></pre></td></tr></table></figure>
+<p>然后，将 <code>transformArray</code> 函数改写如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">transformArray</span>&lt;E, T&gt;<span class="params">(xs: [E], transform: Transform)</span></span> -&gt; [<span class="type">T</span>] &#123;</div><div class="line">    <span class="keyword">var</span> result: [<span class="type">T</span>] = []</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</div><div class="line">        result.append(transform(x))</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样就完成了一个类似 Map 的函数，将这个函数加入 Array 中，并将函数名改为 map，就可以使用 Array 对象来调用这个方法了：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(transform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</div><div class="line">        <span class="keyword">var</span> result: [<span class="type">T</span>] = []</div><div class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</div><div class="line">            result.append(transform(x))</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 其中 Element 使用 Array 中 Element 泛型定义</span></div></pre></td></tr></table></figure>
+<p>我们知道，map 函数已经存在于 Swift 标准库中（基于 Sequence 协议实现），因此并不需要自己来实现，我们通过 Swift 源码来学习一下（路径：<em>swift/stdlib/public/Sequence.swift</em>）：</p>
+<figure class="highlight swift"><figcaption><span>Sequence.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">protocol</span> <span class="title">Sequence</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(</span></span></div><div class="line">        <span class="number">_</span> transform: <span class="params">(Iterator.Element)</span> <span class="keyword">throws</span> -&gt; <span class="type">T</span></div><div class="line">    ) <span class="keyword">rethrows</span> -&gt; [<span class="type">T</span>]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Sequence</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(</span></span></div><div class="line">        <span class="number">_</span> transform: <span class="params">(Iterator.Element)</span> <span class="keyword">throws</span> -&gt; <span class="type">T</span></div><div class="line">    ) <span class="keyword">rethrows</span> -&gt; [<span class="type">T</span>] &#123;</div><div class="line">        <span class="keyword">let</span> initialCapacity = underestimatedCount</div><div class="line">        <span class="keyword">var</span> result = <span class="type">ContiguousArray</span>&lt;<span class="type">T</span>&gt;()</div><div class="line">        result.reserveCapacity(initialCapacity)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> iterator = <span class="keyword">self</span>.makeIterator()</div><div class="line">        </div><div class="line">        <span class="comment">// Add elements up to the initial capacity without checking for regrowth.</span></div><div class="line">        <span class="keyword">for</span> <span class="number">_</span> <span class="keyword">in</span> <span class="number">0</span>..&lt;initialCapacity &#123;</div><div class="line">            result.append(<span class="keyword">try</span> transform(iterator.next()!))</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// Add remaining elements, if any.</span></div><div class="line">        <span class="keyword">while</span> <span class="keyword">let</span> element = iterator.next() &#123;</div><div class="line">            result.append(<span class="keyword">try</span> transform(element))</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="type">Array</span>(result)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了一些额外的处理，核心部分与我们的实现是相同的，使用方法如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> arr = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>]</div><div class="line"><span class="keyword">let</span> arrMapped = arr.<span class="built_in">map</span> &#123; $<span class="number">0</span> % <span class="number">3</span> &#125;</div><div class="line"><span class="built_in">print</span>(arrMapped)</div><div class="line"><span class="comment">// [1, 2, 0, 1]</span></div></pre></td></tr></table></figure>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><p>有了 Map 的经验，对于 Filter 的设计就方便多了，我们参考 <code>transformArray</code> 函数可以这样设计 Filter 函数：</p>
+<ol>
+<li>入参和返回值均为 <code>[T]</code>；</li>
+<li>入参的 <code>transform</code> 修改为 <code>isIncluded</code>，类型为 <code>(T) -&gt; Bool</code>，用于判断是否应该包含在返回值中。</li>
+</ol>
+<p>实现代码如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">filterArray</span>&lt;T&gt;<span class="params">(xs: [T], isIncluded: <span class="params">(T)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">T</span>] &#123;</div><div class="line">    <span class="keyword">var</span> result: [<span class="type">T</span>] = []</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</div><div class="line">        <span class="keyword">if</span> isIncluded(x) &#123;</div><div class="line">            result.append(x)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样的，filter 函数也已经存在于 Swift 标准库中，源码如下（路径：<em>swift/stdlib/public/Sequence.swift</em>）：</p>
+<figure class="highlight swift"><figcaption><span>Sequence.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">protocol</span> <span class="title">Sequence</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(</span></span></div><div class="line">        <span class="number">_</span> isIncluded: <span class="params">(Iterator.Element)</span> <span class="keyword">throws</span> -&gt; <span class="type">Bool</span></div><div class="line">    ) <span class="keyword">rethrows</span> -&gt; [<span class="type">Iterator</span>.<span class="type">Element</span>]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Sequence</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(</span></span></div><div class="line">        <span class="number">_</span> isIncluded: <span class="params">(Iterator.Element)</span> <span class="keyword">throws</span> -&gt; <span class="type">Bool</span></div><div class="line">    ) <span class="keyword">rethrows</span> -&gt; [<span class="type">Iterator</span>.<span class="type">Element</span>] &#123;</div><div class="line">    </div><div class="line">        <span class="keyword">var</span> result = <span class="type">ContiguousArray</span>&lt;<span class="type">Iterator</span>.<span class="type">Element</span>&gt;()</div><div class="line">        <span class="keyword">var</span> iterator = <span class="keyword">self</span>.makeIterator()</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> <span class="keyword">let</span> element = iterator.next() &#123;</div><div class="line">            <span class="keyword">if</span> <span class="keyword">try</span> isIncluded(element) &#123;</div><div class="line">                result.append(element)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="type">Array</span>(result)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>核心部分实现也是相同的，使用方法如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> arr = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>]</div><div class="line"><span class="keyword">let</span> arrFiltered = arr.<span class="built_in">filter</span> &#123; $<span class="number">0</span> &lt; <span class="number">35</span> &#125;</div><div class="line"><span class="built_in">print</span>(arrFiltered)</div><div class="line"><span class="comment">// [10, 20, 30]</span></div></pre></td></tr></table></figure>
+<h3 id="Reduce"><a href="#Reduce" class="headerlink" title="Reduce"></a>Reduce</h3><p>Reduce 与 Map 不同之处在于，Map 每次将集合中的元素抛给 <code>transform</code> 闭包，然后得到一个“变形”后的元素，而 Reduce 是将集合中的元素连同当前上下文中的变量一起抛给入参闭包（此处命名为 <code>combine</code>），以便于该闭包处理，然后返回处理后的结果，因此 <code>combine</code> 的定义类似：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> <span class="type">Combine</span> = (<span class="type">T</span>, <span class="type">E</span>) -&gt; (<span class="type">T</span>)</div><div class="line"><span class="comment">// 由于没有定义 E、T 泛型，所以这里仅作示意</span></div></pre></td></tr></table></figure>
+<p>因此 <code>reduce</code> 函数可以定义如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">reduceArray</span>&lt;E, T&gt;<span class="params">(xs: [E], initial: T, combine: Combine)</span></span> -&gt; <span class="type">T</span> &#123;</div><div class="line">    <span class="keyword">var</span> result: <span class="type">T</span> = initial</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</div><div class="line">        result = combine(result, x)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Swift <code>reduce</code> 函数源码如下（路径：<em>swift/stdlib/public/Sequence.swift</em>）：</p>
+<figure class="highlight swift"><figcaption><span>Sequence.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// You rarely need to use iterators directly, because a `for`-`in` loop is the</span></div><div class="line"><span class="comment">/// more idiomatic approach to traversing a sequence in Swift. Some</span></div><div class="line"><span class="comment">/// algorithms, however, may call for direct iterator use.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// One example is the `reduce1(_:)` method. Similar to the `reduce(_:_:)`</span></div><div class="line"><span class="comment">/// method defined in the standard library, which takes an initial value and a</span></div><div class="line"><span class="comment">/// combining closure, `reduce1(_:)` uses the first element of the sequence as</span></div><div class="line"><span class="comment">/// the initial value.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">/// Here's an implementation of the `reduce1(_:)` method. The sequence's</span></div><div class="line"><span class="comment">/// iterator is used directly to retrieve the initial value before looping</span></div><div class="line"><span class="comment">/// over the rest of the sequence.</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">///     extension Sequence &#123;</span></div><div class="line"><span class="comment">///         func reduce1(</span></div><div class="line"><span class="comment">///             _ nextPartialResult: (Iterator.Element, Iterator.Element) -&gt; Iterator.Element</span></div><div class="line"><span class="comment">///         ) -&gt; Iterator.Element?</span></div><div class="line"><span class="comment">///         &#123;</span></div><div class="line"><span class="comment">///             var i = makeIterator()</span></div><div class="line"><span class="comment">///             guard var accumulated = i.next() else &#123;</span></div><div class="line"><span class="comment">///                 return nil</span></div><div class="line"><span class="comment">///             &#125;</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">///             while let element = i.next() &#123;</span></div><div class="line"><span class="comment">///                 accumulated = nextPartialResult(accumulated, element)</span></div><div class="line"><span class="comment">///             &#125;</span></div><div class="line"><span class="comment">///             return accumulated</span></div><div class="line"><span class="comment">///         &#125;</span></div><div class="line"><span class="comment">///     &#125;</span></div></pre></td></tr></table></figure>
+<p><code>reduce</code> 函数与上面两个函数不太相同，Apple 将其实现以另一个 <code>reduce1</code> 函数放在了注释中，原因应该如注释所说，<code>for</code>-<code>in</code> loop 方式更加常用，但我们仍然可以正常使用 <code>reduce</code> 函数，方法如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> arr = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>]</div><div class="line"><span class="keyword">let</span> arrReduced = arr.<span class="built_in">reduce</span>(output) &#123; result, x <span class="keyword">in</span></div><div class="line">    <span class="keyword">return</span> result + <span class="string">"<span class="subst">\(x)</span> "</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">print</span>(arrReduced)</div><div class="line"><span class="comment">// Arr contains 10 20 30 40 </span></div></pre></td></tr></table></figure>
+<h3 id="函数式解决方案"><a href="#函数式解决方案" class="headerlink" title="函数式解决方案"></a>函数式解决方案</h3><p>在准备好了 Map、Filter 和 Reduce 工具库之后，我们再来解决 City Filter 问题：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> result =</div><div class="line">    cities.<span class="built_in">filter</span> &#123; $<span class="number">0</span>.population &gt; <span class="number">1000</span> &#125;</div><div class="line">        .<span class="built_in">map</span> &#123; $<span class="number">0</span>.cityByScalingPopulation() &#125;</div><div class="line">        .<span class="built_in">reduce</span>(<span class="string">"City: Population"</span>) &#123; result, <span class="built_in">c</span> <span class="keyword">in</span></div><div class="line">            <span class="keyword">return</span> result + <span class="string">"\n"</span> + <span class="string">"<span class="subst">\(<span class="built_in">c</span>.name)</span>: <span class="subst">\(<span class="built_in">c</span>.population)</span>"</span></div><div class="line">        &#125;</div><div class="line"><span class="built_in">print</span>(result)</div><div class="line"><span class="comment">// City: Population</span></div><div class="line"><span class="comment">// Paris: 2241000</span></div><div class="line"><span class="comment">// Madrid: 3165000</span></div><div class="line"><span class="comment">// Berlin: 3562000</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">City</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">cityByScalingPopulation</span><span class="params">()</span></span> -&gt; <span class="type">City</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="type">City</span>(name: name, population: population * <span class="number">1000</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>借助 Map、Filter 和 Reduce 等方法，可以方便的使用链式语法对原数组进行处理，并得到最终结果。</p>
+<hr>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h3 id="函数式思想"><a href="#函数式思想" class="headerlink" title="函数式思想"></a>函数式思想</h3><p>当我们讨论函数式思想时，我们到底在说什么？</p>
+<p>简单说，函数式思想是通过构建一系列简单、实用的函数，再“装配”起来解决实际问题，对于这句话的理解，我想至少有三点：</p>
+<ol>
+<li><strong>目标转换</strong>：基于函数式思想解决问题时，目标不再“急功近利”直接解决具体问题，而是庖丁解牛，把具体问题分解成为小规模的，甚至是互不相干的子模块，攻克这些子模块才是更高优先级的工作；</li>
+<li><strong>函数设计</strong>：分解出的每个子模块，实际上也就对应了一个、或一组能够独立工作的函数，良好的函数设计不仅有助于我们解决当前问题，更能为我们构建一个优秀的工具库，去解决很多其他问题；</li>
+<li><strong>问题解决</strong>：有时具体问题的解决好像已经被我们遗忘了，在解决了子问题、构建了工具库后，简单“装配”就能轻松解决原始问题。借助函数式思想，我们也更容易发现问题之间的共同点，从而快速解决，换句话说，<em>解决问题成为了函数式思想下的“副产品”</em>。</li>
+</ol>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><p>Swift 中对于泛型的应用非常广泛，使用泛型能够使我们事半功倍，一个函数可以“瞬间”支持几乎所有类型，更重要的是，因为 Swift 语言的“类型安全”特性，使得这一切都安全可靠。</p>
+<p>泛型之所以安全，是因为它仍然处于编译器的类型控制下，而 Swift 中的 <code>Any</code> 类型就不那么安全了，表面上看两者都能表示任意类型，但使用 <code>Any</code> 类型能够避开编译器的检查，从而可能造成错误，来看下面的例子：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">exchange</span>&lt;T&gt;<span class="params">(<span class="number">_</span> income: T)</span></span> -&gt; <span class="type">T</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"Money: <span class="subst">\(income)</span>"</span> <span class="comment">// error</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">exchangeAny</span><span class="params">(<span class="number">_</span> income: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"Money: <span class="subst">\(income)</span>"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样的函数体，使用泛型的 <code>exchange</code> 会提示错误：<em>error: cannot convert return expression of type ‘String’ to return type ‘T’</em>，而使用 <code>Any</code> 的 <code>exchangeAny</code> 则不提示任何错误。如果我们不清楚 <code>exchangeAny</code> 的返回值类型，而直接调用，则可能导致运行时错误，是非常危险的。因此，善用泛型能够让我们在“无须牺牲类型安全就能够在编译器的帮助下写出灵活的函数”。</p>
+<p>更多关于泛型的讨论请参阅原书，或官方文档。</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/objcio/functional-swift" target="_blank" rel="external">Github: objcio/functional-swift</a></li>
+<li><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Generics.html" target="_blank" rel="external">The Swift Programming Language: Generics</a></li>
+<li><a href="https://github.com/apple/swift" target="_blank" rel="external">The Swift Programming Language (Source Code)</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/函数式-Swift/" rel="tag">#函数式 Swift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/07/functional-swift-2/" rel="next" title="【函数式 Swift】封装 Core Image">
+                <i class="fa fa-chevron-left"></i> 【函数式 Swift】封装 Core Image
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Outlines
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/graynoel.jpeg"
+               alt="ZhaoHui" />
+          <p class="site-author-name" itemprop="name">ZhaoHui</p>
+          <p class="site-description motion-element" itemprop="description">Coding On The Go...</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本章关键词"><span class="nav-number">1.</span> <span class="nav-text">本章关键词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例：City-Filter"><span class="nav-number">2.</span> <span class="nav-text">案例：City Filter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map"><span class="nav-number">2.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Filter"><span class="nav-number">2.2.</span> <span class="nav-text">Filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reduce"><span class="nav-number">2.3.</span> <span class="nav-text">Reduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数式解决方案"><span class="nav-number">2.4.</span> <span class="nav-text">函数式解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数式思想"><span class="nav-number">3.1.</span> <span class="nav-text">函数式思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型"><span class="nav-number">3.2.</span> <span class="nav-text">泛型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhaoHui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
