@@ -58,16 +58,16 @@
 
 
 
-<meta name="description" content="Swift 引入的 Optional，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
+<meta name="description" content="Swift 引入的 Optionals，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Swift Optionals 源码解析">
 <meta property="og:url" content="http://yoursite.com/2016/11/19/swift-optionals/index.html">
 <meta property="og:site_name" content="Hui Zhao >_<">
-<meta property="og:description" content="Swift 引入的 Optional，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
-<meta property="og:updated_time" content="2016-11-30T09:56:32.000Z">
+<meta property="og:description" content="Swift 引入的 Optionals，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
+<meta property="og:updated_time" content="2017-02-10T08:25:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Swift Optionals 源码解析">
-<meta name="twitter:description" content="Swift 引入的 Optional，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
+<meta name="twitter:description" content="Swift 引入的 Optionals，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 Optional 具体的实现逻辑。">
 
 
 
@@ -282,9 +282,9 @@
       
 
       
-        <p>Swift 引入的 <code>Optional</code>，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 <code>Optional</code> 具体的实现逻辑。<br><a id="more"></a></p>
+        <p>Swift 引入的 <code>Optionals</code>，很好的解决了 Objective-C 时代 “nil or not nil” 的问题，配合 Type-Safe 特性，帮我们减少了很多隐藏的问题。下面让我们通过源码来了解一下 <code>Optional</code> 具体的实现逻辑。<br><a id="more"></a></p>
 <hr>
-<h2 id="初识-Optional"><a href="#初识-Optional" class="headerlink" title="初识 Optional"></a>初识 Optional</h2><p>Swift 中的 <code>Optional</code> 想要表达的涵义更多是“有没有”，而非“空不空”，因此在 Swift 中，对 <code>nil</code> 的使用也就不像 Objective-C 中那么随意。我们需要将其声明为 <code>Optional</code>（可能没有），才能将其赋值为 <code>nil</code>（没有），也正因为表达的是“有没有”，所以可选类型也就不局限于对象类型了，基本数据类型同样可以声明 <code>Optional</code>，并赋值为 <code>nil</code>。</p>
+<h2 id="初识-Optional"><a href="#初识-Optional" class="headerlink" title="初识 Optional"></a>初识 Optional</h2><p>Swift 中的 <code>Optionals</code> 想要表达的涵义更多是“有没有”，而非“空不空”，因此在 Swift 中，对 <code>nil</code> 的使用也就不像 Objective-C 中那么随意。我们需要将其声明为 <code>Optional</code>（可能没有），才能将其赋值为 <code>nil</code>（没有），也正因为表达的是“有没有”，所以可选类型也就不局限于对象类型了，基本数据类型同样可以声明 <code>Optional</code>，并赋值为 <code>nil</code>。</p>
 <h3 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h3><p>Swift 声明一个 <code>Optional</code> 变量方法如下：</p>
 <figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optionalValue: <span class="type">Optional</span>&lt;<span class="type">T</span>&gt;</div></pre></td></tr></table></figure>
 <p>另外，还有一个更常见的声明方式，即 <code>?</code>：</p>
@@ -547,7 +547,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -555,7 +555,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -564,7 +564,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -612,7 +612,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
