@@ -1,0 +1,636 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="函数式 Swift," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/graynoel.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="《函数式 Swift》读书笔记之 QuickCheck">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【函数式 Swift】QuickCheck">
+<meta property="og:url" content="http://yoursite.com/2017/04/23/functional-swift-5/index.html">
+<meta property="og:site_name" content="Hui Zhao >_<">
+<meta property="og:description" content="《函数式 Swift》读书笔记之 QuickCheck">
+<meta property="og:updated_time" content="2017-04-23T10:55:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【函数式 Swift】QuickCheck">
+<meta name="twitter:description" content="《函数式 Swift》读书笔记之 QuickCheck">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/23/functional-swift-5/"/>
+
+
+  <title> 【函数式 Swift】QuickCheck | Hui Zhao >_< </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1260827839&web_id=1260827839" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hui Zhao >_<</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【函数式 Swift】QuickCheck
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-04-23T15:32:38+08:00" content="2017-04-23">
+              2017-04-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index">
+                    <span itemprop="name">Swift</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《函数式 Swift》读书笔记之 QuickCheck<br><a id="more"></a></p>
+<p>QuickCheck 是一个用于随机测试的 Haskell 工具库，本文将基于原书中的案例以及函数式编程方法讨论如何构建 Swift 版本的 QuickCheck 库。</p>
+<p><em>注：在学习本章内容以前，笔者没有学习过 <a href="https://zh.wikipedia.org/wiki/Haskell" target="_blank" rel="external">Haskell</a>，也没有使用过 <a href="https://en.wikipedia.org/wiki/QuickCheck" target="_blank" rel="external">QuickCheck</a>，本文是通过原书及一些网络资料学习后的心得，如有错误或遗漏，欢迎批评指正。</em></p>
+<hr>
+<h2 id="QuickCheck-概述"><a href="#QuickCheck-概述" class="headerlink" title="QuickCheck 概述"></a>QuickCheck 概述</h2><p>QuickCheck 项目始于 1999 年，作者 Koen Claessen 和 John Hughes 在其论文<a href="http://www.eecs.northwestern.edu/~robby/courses/395-495-2009-fall/quick.pdf" target="_blank" rel="external">《QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs》</a>中对测试工具应该具备的特性进行了讨论，主要有以下两点：</p>
+<ol>
+<li>“A testing tool must be able to determine whether a test is passed or failed; the human tester must supply an automatically checkable criterion of doing so.”</li>
+<li>“A testing tool must also be able to generate test cases automatically.”</li>
+</ol>
+<p>这两点还是比较容易理解的，首先，测试人员应该提供一个能够让测试工具自动化判断用例是否成功的标准，然后，测试工具应该能够基于该标准自动化生成测试用例，以便于对应用程序进行随机测试。</p>
+<p>此外，作者还提到 QuickCheck 的一个重要设计思想：”An important design goal was that QuickCheck should be lightweight.”</p>
+<p>下面来具体了解一下 QuickCheck，维基百科中描述如下：</p>
+<blockquote><p>QuickCheck is a combinator library originally written in Haskell, designed to assist in software testing by generating test cases for test suites. It is compatible with the GHC compiler and the Hugs interpreter.</p>
+<p>In QuickCheck the programmer writes assertions about logical properties that a function should fulfill. Then QuickCheck attempts to generate a test case that falsifies these assertions. Once such a test case is found, QuickCheck tries to reduce it to a minimal failing subset by removing or simplifying input data that are not needed to make the test fail.</p>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/QuickCheck" target="_blank" rel="external">QuickCheck</a></cite></footer></blockquote>
+<p>&nbsp;<br>QuickCheck 最初是基于 Haskell 实现的一个库，主要目标是通过生成用例来辅助软件测试。其主要功能逻辑是：</p>
+<ol>
+<li>首先，程序员使用 QuickCheck 编写断言，用于验证某个函数是否满足其逻辑特性；</li>
+<li>然后，QuickCheck 将随机生成测试用例来使上述断言失败；</li>
+<li>接着，一旦发现失败的用例，QuickCheck 会尽可能减少失败用例的输入值，以便于快速定位问题所在；</li>
+<li>最后，输出测试结果：成功，或是会导致测试失败的最小用例集合。</li>
+</ol>
+<p>由此可见，一个 QuickCheck 应该包含以下 4 个组成部分：</p>
+<ol>
+<li>随机数生成；</li>
+<li>用例成功/失败验证标准；</li>
+<li>用例范围最小化；</li>
+<li>测试结果输出。</li>
+</ol>
+<h2 id="构建-Swift-版本-QuickCheck"><a href="#构建-Swift-版本-QuickCheck" class="headerlink" title="构建 Swift 版本 QuickCheck"></a>构建 Swift 版本 QuickCheck</h2><p>构建 Swift 版本的 QuickCheck，我们需要做的也就是构建以上 4 个组成部分。</p>
+<h3 id="随机数生成"><a href="#随机数生成" class="headerlink" title="随机数生成"></a>随机数生成</h3><p>这里的随机数并不特指数值类型，而是应该支持诸如字符、字符串等“各种各样”的类型，为此，我们可以定义一个生成随机数的协议：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Arbitrary</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">arbitrary</span><span class="params">()</span></span> -&gt; <span class="type">Self</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样，想要生成哪种类型的随机数，只需要遵循该协议，并实现对应 <code>arbitrary()</code> 即可。以 <code>Int</code> 为例：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Int</span>: <span class="title">Arbitrary</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">arbitrary</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="type">Int</span>(arc4random())</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">print</span>(<span class="type">Int</span>.arbitrary()) <span class="comment">// "3212540033"</span></div></pre></td></tr></table></figure>
+<h3 id="用例成功-失败验证标准"><a href="#用例成功-失败验证标准" class="headerlink" title="用例成功/失败验证标准"></a>用例成功/失败验证标准</h3><p>用例成功/失败验证标准，即一个函数应该满足的逻辑属性（<code>property</code>），也就是 QuickCheck 作者所说的 “determine whether a test is passed or failed”。因此，<code>property</code> 的定义应该形如：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> property = <span class="type">A</span>: <span class="type">Arbitrary</span> -&gt; <span class="type">Bool</span> <span class="comment">// 语法错误，这里仅做示意</span></div></pre></td></tr></table></figure>
+<p>使用 <code>property</code> 来对输入的随机数进行验证，成功返回 <code>true</code>，失败返回 <code>false</code>，QuickCheck 通过重复生成随机数并验证，来寻找某一个使验证失败的用例，为此我们还需要一个 <code>check</code> 函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> numberOfIterations = <span class="number">100</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">check</span>&lt;A: Arbitrary&gt;<span class="params">(<span class="number">_</span> property: <span class="params">(A)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Void</span> &#123;</div><div class="line">    <span class="keyword">for</span> <span class="number">_</span> <span class="keyword">in</span> <span class="number">0</span> ..&lt; numberOfIterations &#123;</div><div class="line">        <span class="keyword">let</span> value = <span class="type">A</span>.arbitrary()</div><div class="line">        <span class="keyword">guard</span> property(value) <span class="keyword">else</span> &#123;</div><div class="line">            <span class="built_in">print</span>(<span class="string">"Failed Case: \(value)."</span>)</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"All cases passed!"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>check</code> 函数的主要功能有：</p>
+<ol>
+<li>控制循环次数（<code>for _ in 0 ..&lt; numberOfIterations</code>）；</li>
+<li>创建随机输入（<code>let value = A.arbitrary()</code>）;</li>
+<li>验证用例是否成功（<code>guard property(value)</code>）。</li>
+</ol>
+<h3 id="用例范围最小化"><a href="#用例范围最小化" class="headerlink" title="用例范围最小化"></a>用例范围最小化</h3><p>完成了前两步工作之后，我们还需要将失败用例的范围尽量缩小，以便我们更容易的定位问题代码。因此我们希望输入的随机数能够缩减，并重新运行验证过程。</p>
+<p>为此，我们可以定义一个 <code>Smaller</code> 协议来对输入进行缩减处理（原书做法），同样的，我们还可以扩展随机数协议（<code>protocol Arbitrary</code>），为其添加缩减方法。这里我们采用后一种：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Arbitrary</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">arbitrary</span><span class="params">()</span></span> -&gt; <span class="type">Self</span></div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">shrink</span><span class="params">(<span class="number">_</span> : <span class="keyword">Self</span>)</span></span> -&gt; <span class="type">Self</span>?</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>shrink</code> 函数能够对输入的随机数进行缩减并返回，不过，返回值我们使用了可选类型，也就是说，一些输入是无法再被缩减的，例如空数组，这时我们需要返回 <code>nil</code>。</p>
+<p>下面，我们修改以上 <code>Int</code> 扩展，为其添加 <code>shrink</code> 函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Int</span>: <span class="title">Arbitrary</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">arbitrary</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="type">Int</span>(arc4random())</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">shrink</span><span class="params">(<span class="number">_</span> input: Int)</span></span> -&gt; <span class="type">Int</span>? &#123;</div><div class="line">        <span class="keyword">return</span> input == <span class="number">0</span> ? <span class="literal">nil</span> : input / <span class="number">2</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">print</span>(<span class="type">Int</span>.shrink(<span class="number">100</span>)) <span class="comment">// Optional(50)</span></div></pre></td></tr></table></figure>
+<p>在上述例子中，对于整数，我们尝试使用除以 2 的方式来进行缩减，直到等于零。</p>
+<p>事实上，用例缩减是一个反复的过程，甚至可能是一个“无限”的过程，因此，我们将这个“无限”缩减的过程使用函数来代替：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">iterateWhile</span>&lt;A: Arbitrary&gt;<span class="params">(condition: <span class="params">(A)</span></span></span> -&gt; <span class="type">Bool</span>, initial: <span class="type">A</span>, next: (<span class="type">A</span>) -&gt; <span class="type">A</span>?) -&gt; <span class="type">A</span> &#123;</div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> x = next(initial), condition(x) &#123;</div><div class="line">        <span class="keyword">return</span> iterateWhile(condition: condition, initial: x, next: next)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> initial</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们可以在发现失败用例时，通过调用 <code>iterateWhile</code> 函数来缩减输入用例，这样，我们就可以进一步改造 <code>check</code> 函数了：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">check_2</span>&lt;A: Arbitrary&gt;<span class="params">(<span class="number">_</span> property: <span class="params">(A)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Void</span> &#123;</div><div class="line">    <span class="keyword">for</span> <span class="number">_</span> <span class="keyword">in</span> <span class="number">0</span> ..&lt; numberOfIterations &#123;</div><div class="line">        <span class="keyword">let</span> value = <span class="type">A</span>.arbitrary()</div><div class="line">        <span class="keyword">guard</span> property(value) <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 缩减用例</span></div><div class="line">            <span class="keyword">let</span> smallerValue = iterateWhile(&#123; !property($<span class="number">0</span>) &#125;, initial: value) &#123;</div><div class="line">                <span class="type">A</span>.shrink($<span class="number">0</span>)</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">print</span>(<span class="string">"Failed Case: \(smallerValue)."</span>)</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"All cases passed!"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="测试结果输出"><a href="#测试结果输出" class="headerlink" title="测试结果输出"></a>测试结果输出</h3><p>在测试结果输出这一步，我们没有做更多的事情，只是简单的输出结果，这里不再赘述。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>QuickCheck 能够帮助我们快速对函数功能进行测试，并通过用例缩减方式协助定位代码中的问题，使用 QuickCheck 测试驱动开发，还能够迫使我们思考函数所承担的职责以及需要满足的抽象特性，帮助我们设计、开发出模块化、低耦合的程序。</p>
+<p>在理解了 QuickCheck 的思想之后，我们构建了简单的 Swift 版本 QuickCheck，其中融入了函数式思想，我们将整个问题分解为 4 个部分，并分别编写了随机数生成函数、用例验证函数、用例缩减函数以及将这几部分组合起来的 <code>check</code> 函数，从而完成了 QuickCheck 功能。不过距离能够投入使用还有很大的差距。</p>
+<p>目前，已经有开发者完成了一套较为完善的 Swift 版 QuickCheck，名为 <a href="https://github.com/typelift/SwiftCheck" target="_blank" rel="external">SwiftCheck</a>，需要实际应用或是进一步学习可以查阅。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/objcio/functional-swift" target="_blank" rel="external">Github: objcio/functional-swift</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/Haskell" target="_blank" rel="external">Wikipedia: Haskell</a></li>
+<li><a href="https://en.wikipedia.org/wiki/QuickCheck" target="_blank" rel="external">Wikipedia: QuickCheck</a></li>
+<li><a href="https://wiki.haskell.org/Introduction_to_QuickCheck" target="_blank" rel="external">Introduction to QuickCheck1</a></li>
+<li><a href="http://www.eecs.northwestern.edu/~robby/courses/395-495-2009-fall/quick.pdf" target="_blank" rel="external">QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs</a></li>
+<li><a href="https://github.com/typelift/SwiftCheck" target="_blank" rel="external">Github: typelift/SwiftCheck</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/函数式-Swift/" rel="tag">#函数式 Swift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/10/functional-swift-4/" rel="next" title="【函数式 Swift】可选值">
+                <i class="fa fa-chevron-left"></i> 【函数式 Swift】可选值
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Outlines
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/graynoel.jpeg"
+               alt="ZhaoHui" />
+          <p class="site-author-name" itemprop="name">ZhaoHui</p>
+          <p class="site-description motion-element" itemprop="description">Coding On The Go...</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#QuickCheck-概述"><span class="nav-number">1.</span> <span class="nav-text">QuickCheck 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建-Swift-版本-QuickCheck"><span class="nav-number">2.</span> <span class="nav-text">构建 Swift 版本 QuickCheck</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#随机数生成"><span class="nav-number">2.1.</span> <span class="nav-text">随机数生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用例成功-失败验证标准"><span class="nav-number">2.2.</span> <span class="nav-text">用例成功/失败验证标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用例范围最小化"><span class="nav-number">2.3.</span> <span class="nav-text">用例范围最小化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果输出"><span class="nav-number">2.4.</span> <span class="nav-text">测试结果输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhaoHui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
