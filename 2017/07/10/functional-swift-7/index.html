@@ -1,0 +1,632 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="函数式 Swift," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/graynoel.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="《函数式 Swift》读书笔记之枚举">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【函数式 Swift】枚举">
+<meta property="og:url" content="http://yoursite.com/2017/07/10/functional-swift-7/index.html">
+<meta property="og:site_name" content="Hui Zhao >_<">
+<meta property="og:description" content="《函数式 Swift》读书笔记之枚举">
+<meta property="og:updated_time" content="2017-09-13T00:58:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【函数式 Swift】枚举">
+<meta name="twitter:description" content="《函数式 Swift》读书笔记之枚举">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/10/functional-swift-7/"/>
+
+
+  <title> 【函数式 Swift】枚举 | Hui Zhao >_< </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1260827839&web_id=1260827839" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hui Zhao >_<</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【函数式 Swift】枚举
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-07-10T09:25:59+08:00" content="2017-07-10">
+              2017-07-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index">
+                    <span itemprop="name">Swift</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Swift/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《函数式 Swift》读书笔记之枚举<br><a id="more"></a></p>
+<p>Swift 函数式编程的一条核心原则是：“高效的利用类型来规避代码缺陷”，本章中基于 Swift 中的枚举类型对该原则进行的讨论。</p>
+<hr>
+<h2 id="枚举概述"><a href="#枚举概述" class="headerlink" title="枚举概述"></a>枚举概述</h2><h3 id="Objective-C-枚举与-Swift-枚举"><a href="#Objective-C-枚举与-Swift-枚举" class="headerlink" title="Objective-C 枚举与 Swift 枚举"></a>Objective-C 枚举与 Swift 枚举</h3><p>我们在 Objective-C 中经常会使用枚举，例如 UIImage 方向状态枚举：</p>
+<figure class="highlight objc"><figcaption><span>Objective-C</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSInteger</span>, <span class="built_in">UIImageOrientation</span>) &#123;</div><div class="line">    <span class="built_in">UIImageOrientationUp</span>,            <span class="comment">// default orientation</span></div><div class="line">    <span class="built_in">UIImageOrientationDown</span>,          <span class="comment">// 180 deg rotation</span></div><div class="line">    <span class="built_in">UIImageOrientationLeft</span>,          <span class="comment">// 90 deg CCW</span></div><div class="line">    <span class="built_in">UIImageOrientationRight</span>,         <span class="comment">// 90 deg CW</span></div><div class="line">    <span class="built_in">UIImageOrientationUpMirrored</span>,    <span class="comment">// as above but image mirrored along other axis. horizontal flip</span></div><div class="line">    <span class="built_in">UIImageOrientationDownMirrored</span>,  <span class="comment">// horizontal flip</span></div><div class="line">    <span class="built_in">UIImageOrientationLeftMirrored</span>,  <span class="comment">// vertical flip</span></div><div class="line">    <span class="built_in">UIImageOrientationRightMirrored</span>, <span class="comment">// vertical flip</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>UIImageOrientation</code> 的定义并未指定任意各个枚举的具体值，但我们可以像数字一样使用它们：</p>
+<figure class="highlight objc"><figcaption><span>Objective-C</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> new];</div><div class="line"></div><div class="line"><span class="keyword">if</span> (image.imageOrientation == <span class="number">0</span>) &#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"imageOrientation equals 0"</span>); <span class="comment">// "imageOrientation equals 0"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">NSInteger</span> nextOrientation = <span class="built_in">UIImageOrientationLeft</span> + <span class="built_in">UIImageOrientationRight</span>;</div><div class="line"><span class="keyword">if</span> (nextOrientation == <span class="built_in">UIImageOrientationDownMirrored</span>) &#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"nextOrientation is UIImageOrientationDownMirrored"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 Objective-C 中以上代码不会有任何问题，但显然这样的代码并没有实际意义，还会大大降低代码的可读性和可维护性。</p>
+<p>Swift 中的枚举是一种全新的类型，与 <code>NSInteger</code> 等类型没有任何关系，我们可以重新定义一个图片方向枚举如下：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Orientation</span> </span>&#123;</div><div class="line">    <span class="keyword">case</span> up</div><div class="line">    <span class="keyword">case</span> down</div><div class="line">    <span class="keyword">case</span> <span class="keyword">left</span></div><div class="line">    <span class="keyword">case</span> <span class="keyword">right</span></div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> aOrientation = <span class="type">Orientation</span>.up</div><div class="line"><span class="built_in">print</span>(aOrientation) <span class="comment">// "up"</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> bOrientation = <span class="type">Orientation</span>.up + <span class="type">Orientation</span>.down</div><div class="line"><span class="comment">// binary operator '+' cannot be applied to two 'Orientation' operands</span></div></pre></td></tr></table></figure>
+<p>在 Swift 中，我们不能再对枚举类型的值进行类似 Objective-C 的运算，从而也避免了上文无意义代码的问题。</p>
+<h3 id="关联值"><a href="#关联值" class="headerlink" title="关联值"></a>关联值</h3><p>除了不能对枚举类型进行运算，Swift 中的枚举不仅可以表示一个静态的值，还可以包含关联的值，从而为我们设计更简单、自解释的 API 提供了很大方便。例如，原书第四章中的 <code>populationOfCapital</code> 函数：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">populationOfCapital</span><span class="params">(country: String)</span></span> -&gt; <span class="type">Int</span>? &#123;</div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> capital = capitals[country] &#123;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> population = cities[capital] &#123;</div><div class="line">            <span class="keyword">return</span> population * <span class="number">1000</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">nil</span></div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在查找一个首都的人口时，我们使用可选值 <code>Int?</code> 作为返回值类型，查找成功时返回 <code>Int</code>，失败时返回 <code>nil</code>。我们可以使用以下 Swift 枚举代替 <code>Int?</code> 返回值：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">enum</span> <span class="title">LookupError</span>: <span class="title">Error</span> </span>&#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">CapitalNotFound</span></div><div class="line">    <span class="keyword">case</span> <span class="type">PopulationNotFound</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">enum</span> <span class="title">PopulationResult</span> </span>&#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">Success</span>(<span class="type">Int</span>)</div><div class="line">    <span class="keyword">case</span> <span class="type">Error</span>(<span class="type">LookupError</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>枚举 <code>PopulationResult</code> 中每一项都有一个关联值，其中 <code>Success</code> 关联一个 <code>Int</code> 值，用以表示查找成功时的返回，<code>Error</code> 关联另一个枚举 <code>LookupError</code> 用来表示查找失败时具体的错误类型，此时 <code>populationOfCapital</code> 函数可以改写为：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">populationOfCapital</span><span class="params">(country: String)</span></span> -&gt; <span class="type">PopulationResult</span> &#123;</div><div class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> capital = capitals[country] <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> .<span class="type">Error</span>(.<span class="type">CapitalNotFound</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> population = cities[capital] <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> .<span class="type">Error</span>(.<span class="type">PopulationNotFound</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> .<span class="type">Success</span>(population)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用时，我们可以使用以下方法：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> capitals: [<span class="type">String</span>: <span class="type">String</span>] = [:]</div><div class="line"><span class="keyword">let</span> cities: [<span class="type">String</span>: <span class="type">Int</span>] = [:]</div><div class="line"></div><div class="line"><span class="keyword">switch</span> populationOfCapital(country: <span class="string">"China"</span>) &#123;</div><div class="line"><span class="keyword">case</span> <span class="keyword">let</span> .<span class="type">Success</span>(population):</div><div class="line">    <span class="built_in">print</span>(<span class="string">"China's capital has \(population) thousand people"</span>)</div><div class="line"><span class="keyword">case</span> <span class="keyword">let</span> .<span class="type">Error</span>(error):</div><div class="line">    <span class="built_in">print</span>(<span class="string">"Error: \(error)"</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// Error: CapitalNotFound</span></div></pre></td></tr></table></figure>
+<p>上面的写法借助枚举，使得代码的语义更加清晰，在达到可选值效果的基础上，让调用方更明确发生错误时（可选值返回 <code>nil</code>）具体的问题是什么。</p>
+<p>在实际开发中，以上成功的情况不一定都返回 <code>Int</code> 类型，可能是 <code>String</code> 或其他类型，这时，我们可以结合<strong>泛型</strong>来定义更通用的枚举类型：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Result</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">Success</span>(<span class="type">T</span>)</div><div class="line">    <span class="keyword">case</span> <span class="type">Error</span>(<span class="type">Error</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关于泛型和枚举的结合使用，这里不再赘述，大家可以参考原书进行学习。</p>
+<h3 id="try、throws-与-catch"><a href="#try、throws-与-catch" class="headerlink" title="try、throws 与 catch"></a>try、throws 与 catch</h3><p>与很多语言相似，Swift 中的错误处理机制使用 <code>try</code>、<code>throw</code> 以及 <code>catch</code> 来工作，例如前文中的 <code>populationOfCapital</code> 函数，可以在查找失败时抛出错误：</p>
+<figure class="highlight swift"><figcaption><span>Swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">populationOfCapitalThrowsError</span><span class="params">(country: String)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> capital = capitals[country] <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="type">LookupError</span>.<span class="type">CapitalNotFound</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> population = cities[capital] <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="type">LookupError</span>.<span class="type">PopulationNotFound</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> population</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">do</span> &#123;</div><div class="line">    <span class="keyword">let</span> population = <span class="keyword">try</span> populationOfCapitalThrowsError(country: <span class="string">"China"</span>)</div><div class="line">&#125; <span class="keyword">catch</span> &#123;</div><div class="line">    <span class="built_in">print</span>(<span class="string">"\(error)"</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// CapitalNotFound</span></div></pre></td></tr></table></figure>
+<p>以上这样的错误处理机制与 Swift 内建的错误处理机制是相似的，我们可以通过 Swift 源码中的一个例子来了解（路径：<em>swift/stdlib/public/core/ErrorType.swift</em>）：</p>
+<figure class="highlight swift"><figcaption><span>ErrorType.swift</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">///     enum IntParsingError: Error &#123;</span></div><div class="line"><span class="comment">///         case overflow</span></div><div class="line"><span class="comment">///         case invalidInput(String)</span></div><div class="line"><span class="comment">///     &#125;</span></div><div class="line"><span class="comment">///</span></div><div class="line"><span class="comment">///     extension Int &#123;</span></div><div class="line"><span class="comment">///         init(validating input: String) throws &#123;</span></div><div class="line"><span class="comment">///             // ...</span></div><div class="line"><span class="comment">///             if !_isValid(s) &#123;</span></div><div class="line"><span class="comment">///                 throw IntParsingError.invalidInput(s)</span></div><div class="line"><span class="comment">///             &#125;</span></div><div class="line"><span class="comment">///             // ...</span></div><div class="line"><span class="comment">///         &#125;</span></div><div class="line"><span class="comment">///     &#125;</span></div></pre></td></tr></table></figure>
+<p>这里定义了一个用以描述格式化 <code>Int</code> 值的错误枚举 <code>IntParsingError</code>，并且在一个使用 <code>String</code> 初始化 <code>Int</code> 的函数中抛出了表示非法输入的 <code>IntParsingError.invalidInput(s)</code> 异常。这与我们上文中错误处理是相同的。</p>
+<hr>
+<h2 id="代数数据类型"><a href="#代数数据类型" class="headerlink" title="代数数据类型"></a>代数数据类型</h2><p>在讨论代数数据类型（Algebraic Data Type）之前，我们先来看看维基百科中对枚举的解释：</p>
+<blockquote><p>In computer programming, an enumerated type (also called enumeration, enum, or factor in the R programming language, and a categorical variable in statistics) is <strong>a data type consisting of a set of named values called elements, members, enumeral, or enumerators of the type</strong>.</p>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/Enumerated_type" target="_blank" rel="external">Enumerated_type</a></cite></footer></blockquote>
+<p>&nbsp;<br>加粗部分说明了枚举是一种包含了一组命名元素的集合。我们通常还把枚举称为“和类型”（Sum type），那和类型又是什么呢？</p>
+<blockquote><p>In computer science, a tagged union, also called a variant, variant record, discriminated union, disjoint union, or <strong>sum type</strong>, is a data structure used to hold a value that could take on several different, but fixed, types.<br><strong>An enumerated type can be seen as a degenerate case</strong>: a tagged union of unit types. It corresponds to a set of nullary constructors and may be implemented as a simple tag variable, since it holds no additional data besides the value of the tag.<br><strong>Tagged unions are most important in functional languages</strong> such as ML and Haskell, where they are called datatypes (see algebraic data type) and the compiler is able to verify that all cases of a tagged union are always handled, avoiding many types of errors. They can, however, be constructed in nearly any language, and are <strong>much safer than untagged unions</strong>, often simply called unions, which are similar but do not explicitly keep track of which member of the union is currently in use.</p>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/Tagged_union" target="_blank" rel="external">Tagged union</a></cite></footer></blockquote>
+<p>&nbsp;<br>和类型又称为 <strong>Tagged union</strong>，用于表示一组“不相交”的值集合，集合中的每一个值代表一个具体的含义，并且同时只能有一个值被使用，这与枚举本身的用法和含义是吻合的。</p>
+<p>引文中还提到，和类型对于函数式编程语言是非常重要的，编译器能够验证是否处理了集合中的所有情况，从而避免了许多类型带来的错误；另外，相比于一般集合（untagged unions），和类型更加安全，因为我们无法清楚的知道当前正在使用的集合中的哪一个值。</p>
+<p>最后，我们来了解一下代数数据类型：</p>
+<blockquote><p>In computer programming, especially functional programming and type theory, an algebraic data type is <strong>a kind of composite type, i.e., a type formed by combining other types</strong>.<br>Two common classes of algebraic types are product types (i.e., tuples and records) and <strong>sum types</strong>, also called tagged or disjoint unions or variant types.<br>The values of a product type typically contain several values, called fields. <strong>All values of that type have the same combination of field types</strong>.</p>
+<footer><strong>Wikipedia</strong><cite><a href="https://en.wikipedia.org/wiki/Algebraic_data_type" target="_blank" rel="external">Algebraic data type</a></cite></footer></blockquote>
+<p>&nbsp;<br>代数数据类型是指由一组类型合成起来的数据类型，用以描述一个数据类型的集合，换句话说，一个代数数据类型的值中包含组成该类型的全部值，并且同一个代数数据类型的值都是同构的，如自然数集、布尔值集、字符集或串集。</p>
+<hr>
+<h2 id="为什么选择枚举？"><a href="#为什么选择枚举？" class="headerlink" title="为什么选择枚举？"></a>为什么选择枚举？</h2><p>在本章的案例中，枚举和可选值都能实现我们想要的功能，两者并没有太大的优劣差异。</p>
+<p>但是，借助枚举所具备的代数数据类型优势，通过良好的设计，能够让代码具有更好的自解释性和安全性，处理枚举类型的数据时，我们可以聚焦于枚举中的各个 case，而不用担心因为代码变动出现一些未考虑到的运行分支，导致程序产生异常。这也正映射了 Swift 函数式编程的一条核心原则：<strong>“高效的利用类型来规避代码缺陷”</strong>。</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/objcio/functional-swift" target="_blank" rel="external">Github: objcio/functional-swift</a></li>
+<li><a href="https://github.com/apple/swift" target="_blank" rel="external">The Swift Programming Language (Source Code)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Enumerated_type" target="_blank" rel="external">Wikipedia: Enumerated_type</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Tagged_union" target="_blank" rel="external">Wikipedia: Tagged union</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Algebraic_data_type" target="_blank" rel="external">Wikipedia: Algebraic data type</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/函数式-Swift/" rel="tag">#函数式 Swift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/24/functional-swift-6/" rel="next" title="【函数式 Swift】不可变性的价值">
+                <i class="fa fa-chevron-left"></i> 【函数式 Swift】不可变性的价值
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Outlines
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/graynoel.jpeg"
+               alt="ZhaoHui" />
+          <p class="site-author-name" itemprop="name">ZhaoHui</p>
+          <p class="site-description motion-element" itemprop="description">Coding On The Go...</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/_HuiZhao_" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#枚举概述"><span class="nav-number">1.</span> <span class="nav-text">枚举概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Objective-C-枚举与-Swift-枚举"><span class="nav-number">1.1.</span> <span class="nav-text">Objective-C 枚举与 Swift 枚举</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关联值"><span class="nav-number">1.2.</span> <span class="nav-text">关联值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#try、throws-与-catch"><span class="nav-number">1.3.</span> <span class="nav-text">try、throws 与 catch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代数数据类型"><span class="nav-number">2.</span> <span class="nav-text">代数数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择枚举？"><span class="nav-number">3.</span> <span class="nav-text">为什么选择枚举？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhaoHui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
