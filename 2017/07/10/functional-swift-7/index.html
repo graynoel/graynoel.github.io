@@ -64,7 +64,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/07/10/functional-swift-7/index.html">
 <meta property="og:site_name" content="Hui Zhao >_<">
 <meta property="og:description" content="《函数式 Swift》读书笔记之枚举">
-<meta property="og:updated_time" content="2017-09-13T00:58:59.000Z">
+<meta property="og:updated_time" content="2018-05-23T08:00:32.601Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【函数式 Swift】枚举">
 <meta name="twitter:description" content="《函数式 Swift》读书笔记之枚举">
@@ -283,7 +283,7 @@
 
       
         <p>《函数式 Swift》读书笔记之枚举<br><a id="more"></a></p>
-<p>Swift 函数式编程的一条核心原则是：“高效的利用类型来规避代码缺陷”，本章中基于 Swift 中的枚举类型对该原则进行的讨论。</p>
+<p>Swift 函数式编程的一条核心原则是：“<strong>高效的利用类型来规避代码缺陷</strong>”，本章中基于 Swift 中的枚举类型对该原则进行的讨论。</p>
 <hr>
 <h2 id="枚举概述"><a href="#枚举概述" class="headerlink" title="枚举概述"></a>枚举概述</h2><h3 id="Objective-C-枚举与-Swift-枚举"><a href="#Objective-C-枚举与-Swift-枚举" class="headerlink" title="Objective-C 枚举与 Swift 枚举"></a>Objective-C 枚举与 Swift 枚举</h3><p>我们在 Objective-C 中经常会使用枚举，例如 UIImage 方向状态枚举：</p>
 <figure class="highlight objc"><figcaption><span>Objective-C</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSInteger</span>, <span class="built_in">UIImageOrientation</span>) &#123;</div><div class="line">    <span class="built_in">UIImageOrientationUp</span>,            <span class="comment">// default orientation</span></div><div class="line">    <span class="built_in">UIImageOrientationDown</span>,          <span class="comment">// 180 deg rotation</span></div><div class="line">    <span class="built_in">UIImageOrientationLeft</span>,          <span class="comment">// 90 deg CCW</span></div><div class="line">    <span class="built_in">UIImageOrientationRight</span>,         <span class="comment">// 90 deg CW</span></div><div class="line">    <span class="built_in">UIImageOrientationUpMirrored</span>,    <span class="comment">// as above but image mirrored along other axis. horizontal flip</span></div><div class="line">    <span class="built_in">UIImageOrientationDownMirrored</span>,  <span class="comment">// horizontal flip</span></div><div class="line">    <span class="built_in">UIImageOrientationLeftMirrored</span>,  <span class="comment">// vertical flip</span></div><div class="line">    <span class="built_in">UIImageOrientationRightMirrored</span>, <span class="comment">// vertical flip</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
